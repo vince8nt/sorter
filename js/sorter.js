@@ -48,17 +48,20 @@ class Button {
 
 
 class Selector {
-	constructor () {
+	constructor (color, bColor, sColor) {
+		this.color = color;
+		this.bColor = bColor;
+		this.sColor = sColor;
 		this.buttons = [];
 		this.bold = -1;
 	}
-	addButton (x, y, width, height, text, color) {
+	addButton (x, y, width, height, text) {
 		if (this.buttons.length === 0) {
-			this.buttons.push(new Button(x, y, width, height, text, color, "#000000"));
+			this.buttons.push(new Button(x, y, width, height, text, this.color, this.sColor));
 			this.bold = 0;
 		}
 		else {
-			this.buttons.push(new Button(x, y, width, height, text, color, "#808080"));
+			this.buttons.push(new Button(x, y, width, height, text, this.color, this.bColor));
 		}
 		this.buttons[this.buttons.length - 1].draw();
 	}
@@ -71,10 +74,10 @@ class Selector {
 	clicked (pointerX, pointerY) {
 		for (var i = 0; i < this.buttons.length; i++) {
 			if (this.buttons[i].clicked(pointerX, pointerY)) {
-				this.buttons[this.bold].setBorder("#808080");
+				this.buttons[this.bold].setBorder(this.bColor);
 				this.buttons[this.bold].draw();
 				this.bold = i;
-				this.buttons[i].setBorder("#000000");
+				this.buttons[i].setBorder(this.sColor);
 				this.buttons[i].draw();
 				return true;
 			}
@@ -84,20 +87,20 @@ class Selector {
 }
 
 
-sortType = new Selector();
-sortType.addButton(10, 480, 100, 50, "type 1", "#9090FF");
-sortType.addButton(10, 540, 100, 50, "type 2", "#9090FF");
-sortType.addButton(120, 480, 100, 50, "type 3", "#9090FF");
-sortType.addButton(120, 540, 100, 50, "type 4", "#9090FF");
-sortType.addButton(230, 480, 100, 50, "type 5", "#9090FF");
-sortType.addButton(230, 540, 100, 50, "type 6", "#9090FF");
-sortType.addButton(340, 480, 100, 50, "type 7", "#9090FF");
-sortType.addButton(340, 540, 100, 50, "type 8", "#9090FF");
+sortType = new Selector("#9090FF", "#707070", "#FF0000");
+sortType.addButton(10, 480, 100, 50, "type 1");
+sortType.addButton(10, 540, 100, 50, "type 2");
+sortType.addButton(120, 480, 100, 50, "type 3");
+sortType.addButton(120, 540, 100, 50, "type 4");
+sortType.addButton(230, 480, 100, 50, "type 5");
+sortType.addButton(230, 540, 100, 50, "type 6");
+sortType.addButton(340, 480, 100, 50, "type 7");
+sortType.addButton(340, 540, 100, 50, "type 8");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
 
-goButton = new Button(700, 200, 100, 100, "Go", "#20C010", "#000000");
+goButton = new Button(800, 480, 190, 110, "Go", "#20C010", "#000000");
 goButton.draw();
 
 

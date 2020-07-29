@@ -46,7 +46,6 @@ class Button {
 	}	
 }
 
-
 class Selector {
 	constructor (color, bColor, sColor) {
 		this.color = color;
@@ -86,6 +85,57 @@ class Selector {
 	}
 }
 
+class Graph {
+	constructor(left, top, width, height) {
+		this.items = [1, 2, 3, 4, 5, 6, 7, 8];
+		this.left = left;
+		this.top = top;
+		this.width = width;
+		this.height = height;
+		this.color = "#10FF10";
+		this.border = "#000000";
+	}
+	draw() {
+		ctx.clearRect(this.left, this.top, this.width, this.height);
+		var length = this.items.length;
+		for (var i = 0; i < length; i++) {
+			var x = this.left + i * this.width / length;
+			var tall = this.items[i] / length * this.height;
+			var y = this.top + this.height - tall;
+			ctx.fillStyle = this.border;
+			ctx.fillRect(x, y, this.width / length, tall);
+			ctx.fillStyle = this.color;
+			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
+		}
+	}
+	addCol() {
+		var newLength = this.items.length + 1;
+		if (newLength > 100)
+			return;
+		this.items = [];
+		for (var i = 0; i < newLength; i++) {
+			this.items.push(i + 1);
+		}
+	}
+	removeCol() {
+		var newLength = this.items.length - 1;
+		if (newLength < 2)
+			return;
+		this.items = [];
+		for (var i = 0; i < newLength; i++) {
+			this.items.push(i + 1);
+		}
+	}
+	shuffle() {
+		var tempItems = [];
+		while (this.items.length > 0) {
+			var index = Math.floor(Math.random() * this.items.length);
+			tempItems.push(this.items.splice(index, 1));
+		}
+		this.items = tempItems;
+	}
+}
+
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "type 1");
@@ -103,18 +153,24 @@ shuffleButton.draw();
 goButton = new Button(800, 480, 190, 110, "Go", "#20C010", "#000000");
 goButton.draw();
 
+myGraph = new Graph(10, 10, 980, 440);
+myGraph.draw();
+
 
 c.addEventListener('click', function(event) {
     var screenX = event.pageX - c.offsetLeft - c.clientLeft;
     var screenY = event.pageY - c.offsetTop - c.clientTop;
-
     // selector buttons
     if (sortType.clicked(screenX, screenY))
     	return;
-
     // go button
     if (goButton.clicked(screenX, screenY)) {
     	alert("Go pressed. Using " + sortType.getSelected() + " sort.");
+    }
+    // shuffle button
+    if(shuffleButton.clicked(screenX, screenY)) {
+    	myGraph.shuffle();
+    	myGraph.draw();
     }
 
 }, false);

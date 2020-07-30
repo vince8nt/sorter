@@ -3,7 +3,7 @@ var ctx = c.getContext("2d");
 
 
 
-
+// classes -----------------------------------------------------------------------
 
 class Button {
 	constructor(x2, y2, w, h, text, col, border) {
@@ -108,23 +108,35 @@ class Graph {
 			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
 		}
 	}
+	canAdd() {
+		if (this.items.length < 100)
+			return true;
+		return false;
+	}
+	canSubtract() {
+		if (this.items.length > 2)
+			return true;
+		return false;
+	}
 	addCol() {
+		if (! this.canAdd())
+			return false;
 		var newLength = this.items.length + 1;
-		if (newLength > 100)
-			return;
 		this.items = [];
 		for (var i = 0; i < newLength; i++) {
 			this.items.push(i + 1);
 		}
+		return true;
 	}
 	removeCol() {
+		if (! this.canSubtract())
+			return false;
 		var newLength = this.items.length - 1;
-		if (newLength < 2)
-			return;
 		this.items = [];
 		for (var i = 0; i < newLength; i++) {
 			this.items.push(i + 1);
 		}
+		return true;
 	}
 	shuffle() {
 		var tempItems = [];
@@ -136,6 +148,7 @@ class Graph {
 	}
 }
 
+// make visuals -------------------------------------------------------------------
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "type 1");
@@ -153,27 +166,72 @@ shuffleButton.draw();
 goButton = new Button(800, 480, 190, 110, "Go", "#20C010", "#000000");
 goButton.draw();
 
+addButton = new Button(570, 480, 50, 50, "+", "#20C010", "#000000");
+subButton = new Button(570, 540, 50, 50, "-", "#C01010", "#000000");
+addButton.draw();
+subButton.draw();
+
 myGraph = new Graph(10, 10, 980, 440);
 myGraph.draw();
 
+// program starts here ------------------------------------------------------------
+
+function doAdd() {
+	if (! myGraph.canSubtract()) { // visually enable sub button
+		subButton.setBorder("#000000");
+		subButton.setColor("#C01010");
+		subButton.draw();
+	}
+	if (myGraph.addCol()) {
+		myGraph.draw();
+		if (! myGraph.canAdd()) { // visually disable add button
+			addButton.setBorder("#707070");
+			addButton.setColor("#909090");
+			addButton.draw();
+		}
+	}
+}
+
+function doSub() {
+	if (! myGraph.canAdd()) { // visually enable add button
+		addButton.setBorder("#000000");
+		addButton.setColor("#20C010");
+		addButton.draw();
+	}
+	if (myGraph.removeCol()) {
+		myGraph.draw();
+		if (! myGraph.canSubtract()) { // visually disable sub button
+			subButton.setBorder("#707070");
+			subButton.setColor("#909090");
+			subButton.draw();
+		}
+	}
+}
 
 c.addEventListener('click', function(event) {
     var screenX = event.pageX - c.offsetLeft - c.clientLeft;
     var screenY = event.pageY - c.offsetTop - c.clientTop;
-    // selector buttons
-    if (sortType.clicked(screenX, screenY))
-    	return;
-    // go button
-    if (goButton.clicked(screenX, screenY)) {
+    
+    if (sortType.clicked(screenX, screenY)) { // selector buttons
+    	// nothing to be done
+    }
+    else if (goButton.clicked(screenX, screenY)) { // go button
     	alert("Go pressed. Using " + sortType.getSelected() + " sort.");
     }
-    // shuffle button
-    if(shuffleButton.clicked(screenX, screenY)) {
+    else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
     	myGraph.shuffle();
     	myGraph.draw();
     }
+    else if (addButton.clicked(screenX, screenY)) { // add button
+    	doAdd();
+    }
+    else if (subButton.clicked(screenX, screenY)) { // subtract button
+    	doSub();
+    }
 
 }, false);
+
+
 
 
 

@@ -95,7 +95,7 @@ class Graph {
 		this.color = "#10FF10";
 		this.border = "#000000";
 	}
-	draw() {
+	draw(bold) {
 		ctx.clearRect(this.left, this.top, this.width, this.height);
 		var length = this.items.length;
 		for (var i = 0; i < length; i++) {
@@ -104,7 +104,10 @@ class Graph {
 			var y = this.top + this.height - tall;
 			ctx.fillStyle = this.border;
 			ctx.fillRect(x, y, this.width / length, tall);
-			ctx.fillStyle = this.color;
+			if (i === bold)
+				ctx.fillStyle = "#FF0000";
+			else
+				ctx.fillStyle = this.color;
 			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
 		}
 	}
@@ -146,6 +149,9 @@ class Graph {
 		}
 		this.items = tempItems;
 	}
+	getItems() {
+		return this.items;
+	}
 }
 
 // make visuals -------------------------------------------------------------------
@@ -172,7 +178,7 @@ addButton.draw();
 subButton.draw();
 
 myGraph = new Graph(10, 10, 980, 440);
-myGraph.draw();
+myGraph.draw(-1);
 
 // program starts here ------------------------------------------------------------
 
@@ -183,7 +189,7 @@ function doAdd() {
 		subButton.draw();
 	}
 	if (myGraph.addCol()) {
-		myGraph.draw();
+		myGraph.draw(-1);
 		if (! myGraph.canAdd()) { // visually disable add button
 			addButton.setBorder("#707070");
 			addButton.setColor("#909090");
@@ -199,7 +205,7 @@ function doSub() {
 		addButton.draw();
 	}
 	if (myGraph.removeCol()) {
-		myGraph.draw();
+		myGraph.draw(-1);
 		if (! myGraph.canSubtract()) { // visually disable sub button
 			subButton.setBorder("#707070");
 			subButton.setColor("#909090");
@@ -216,11 +222,13 @@ c.addEventListener('click', function(event) {
     	// nothing to be done
     }
     else if (goButton.clicked(screenX, screenY)) { // go button
-    	alert("Go pressed. Using " + sortType.getSelected() + " sort.");
+    	var g = myGraph.getItems();
+    	// alert("Go pressed. Using " + sortType.getSelected() + " sort.");
+    	bubbleSort(g, 0, g.length);
     }
     else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
     	myGraph.shuffle();
-    	myGraph.draw();
+    	myGraph.draw(-1);
     }
     else if (addButton.clicked(screenX, screenY)) { // add button
     	doAdd();
@@ -230,6 +238,34 @@ c.addEventListener('click', function(event) {
     }
 
 }, false);
+
+function bubbleSort(items, i, length) {
+	// if done
+	if (length < 2) {
+		alert("Sorted");
+		return;
+	}
+
+	// do the switch
+	if (items[i] > items[i + 1]) {
+		// alert("On index " + i + ", " + items[i] + " is greater than " + items[i + 1]);
+		var temp = items[i];
+		items[i] = items[i + 1];
+		items[i + 1] = temp;
+	}
+
+	// visual update
+	myGraph.draw(i);
+
+	// use setTimeout before next operation
+	if (i > length - 3) {
+		setTimeout(bubbleSort, 100, items, 0, length - 1);
+	}
+	else {
+		setTimeout(bubbleSort, 100, items, i + 1, length);
+	}
+}
+
 
 
 

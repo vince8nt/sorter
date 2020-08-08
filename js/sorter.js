@@ -293,17 +293,20 @@ function bubbleSort() {
 	var graphCopy = [...myGraph.getItems()];
 
 	for (var max = graphCopy.length - 1; max > -1; max--) {
+		var noSwaps = true;
 		for (var i = 0; i < max; i++) {
 			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) { // idk why parseInt is required
 				swaps.push([[i, i + 1], [i, i + 1]]);
 				var temp = graphCopy[i];
 				graphCopy[i] = graphCopy[i + 1];
 				graphCopy[i + 1] = temp;
+				noSwaps = false;
 			}
 			else {
 				swaps.push([[i, i + 1], [-1, -1]]);
 			}
 		}
+		if (noSwaps) return swaps; // terminate sorting because it is already finished
 	}
 	return swaps;
 }

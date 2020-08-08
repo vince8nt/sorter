@@ -251,18 +251,21 @@ c.addEventListener('click', function(event) {
 }, false);
 
 function doSwaps(swaps) {
+	var swapsNum = 0;
 	for (var i = 0; i < swaps.length; i++) {
 		setTimeout(swap, 100 * (i), swaps[i][0], swaps[i][1][0], swaps[i][1][1]);
+		if (swaps[i][1][0] !== -1) swapsNum++;
 	}
-	setTimeout(endSwaps, 100 * swaps.length);
+	setTimeout(endSwaps, 100 * swaps.length, swaps.length, swapsNum);
 }
 
-function endSwaps() {
-	sorting = false;
+function endSwaps(c, s) {
 	goButton.setBorder("#000000");
 	goButton.setColor("#20C010");
 	goButton.draw();
 	myGraph.draw([]);
+	alert("Array sorted: " + c + " comparisons, " + s + " swaps.");
+	sorting = false;
 }
 
 function swap(bold, first, second) {

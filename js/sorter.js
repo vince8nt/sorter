@@ -165,7 +165,7 @@ sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Insertion Sort");
 sortType.addButton(120, 480, 100, 50, "Merge Sort");
-sortType.addButton(120, 540, 100, 50, "type 4");
+sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "type 5");
 sortType.addButton(230, 540, 100, 50, "type 6");
 sortType.addButton(340, 480, 100, 50, "type 7");
@@ -239,6 +239,8 @@ c.addEventListener('click', function(event) {
 		goButton.draw();
 		if (sortType.getSelected() === "Bubble Sort")
     		doSwaps(bubbleSort());
+    	else if (sortType.getSelected() === "Cocktail Shaker")
+    		doSwaps(cocktailShaker());
     	else if (sortType.getSelected() === "Insertion Sort")
     		doSwaps(insertionSort());
     	else if (sortType.getSelected() === "Merge Sort")
@@ -341,12 +343,52 @@ function bubbleSort() {
 	return swaps;
 }
 
+function cocktailShaker() { // bidirectional bubble sort
+	var swaps = []; // [[[highlights], [swaps]], etc]
+	var graphCopy = [...myGraph.getItems()];
+
+	var min = 0;
+	var max = graphCopy.length - 1;
+	while (min < max) {
+		var noSwaps = true;
+		for (var i = min; i < max; i++) {
+			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) {
+				swaps.push([[i, i + 1], [i, i + 1]]);
+				var temp = graphCopy[i];
+				graphCopy[i] = graphCopy[i + 1];
+				graphCopy[i + 1] = temp;
+				noSwaps = false;
+			}
+			else {
+				swaps.push([[i, i + 1], [-1, -1]]);
+			}
+		}
+		if (noSwaps) return swaps;
+		noSwaps = true;
+		max--;
+		for (var i = max; i > min; i--) {
+			if (parseInt(graphCopy[i - 1]) > parseInt(graphCopy[i])) {
+				swaps.push([[i - 1, i], [i - 1, i]]);
+				var temp = graphCopy[i - 1];
+				graphCopy[i - 1] = graphCopy[i];
+				graphCopy[i] = temp;
+				noSwaps = false;
+			}
+			else {
+				swaps.push([[i - 1, i], [-1, -1]]);
+			}
+		}
+		if (noSwaps) return swaps;
+		min++;
+	}
+	return swaps;
+}
+
 function insertionSort() {
 	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
-	for (var start = 1; start < graphCopy.length; start++) {
-		// swaps.push([[start - 1, start], [-1, -1]]);
+	for (var start = 1; start < graphCopy.length; start++) { // array length is >= 2
 		for (var i = start; i > 0; i--) {
 			if (parseInt(graphCopy[i]) >= parseInt(graphCopy[i - 1])) {
 				swaps.push([[i - 1, i], [-1, -1]]);

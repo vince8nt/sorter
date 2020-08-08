@@ -95,7 +95,7 @@ class Graph {
 		this.color = "#10FF10";
 		this.border = "#000000";
 	}
-	draw(bold) {
+	draw(bold) { // bold is an array of each bolded index
 		ctx.clearRect(this.left, this.top, this.width, this.height);
 		var length = this.items.length;
 		for (var i = 0; i < length; i++) {
@@ -104,10 +104,13 @@ class Graph {
 			var y = this.top + this.height - tall;
 			ctx.fillStyle = this.border;
 			ctx.fillRect(x, y, this.width / length, tall);
-			if (i === bold)
-				ctx.fillStyle = "#FF0000";
-			else
-				ctx.fillStyle = this.color;
+			ctx.fillStyle = this.color;
+			for (var j = 0; j < bold.length; j++) {
+				if (i === bold[j]) {
+					ctx.fillStyle = "#FF0000";
+					break;
+				}
+			}
 			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
 		}
 	}
@@ -178,7 +181,9 @@ addButton.draw();
 subButton.draw();
 
 myGraph = new Graph(10, 10, 980, 440);
-myGraph.draw(-1);
+myGraph.draw([]);
+
+var sorting = false;
 
 // program starts here ------------------------------------------------------------
 
@@ -189,7 +194,7 @@ function doAdd() {
 		subButton.draw();
 	}
 	if (myGraph.addCol()) {
-		myGraph.draw(-1);
+		myGraph.draw([]);
 		if (! myGraph.canAdd()) { // visually disable add button
 			addButton.setBorder("#707070");
 			addButton.setColor("#909090");
@@ -205,7 +210,7 @@ function doSub() {
 		addButton.draw();
 	}
 	if (myGraph.removeCol()) {
-		myGraph.draw(-1);
+		myGraph.draw([]);
 		if (! myGraph.canSubtract()) { // visually disable sub button
 			subButton.setBorder("#707070");
 			subButton.setColor("#909090");
@@ -215,6 +220,8 @@ function doSub() {
 }
 
 c.addEventListener('click', function(event) {
+	if (sorting) return; // does not allow modifications during the sorting process
+
     var screenX = event.pageX - c.offsetLeft - c.clientLeft;
     var screenY = event.pageY - c.offsetTop - c.clientTop;
     
@@ -222,13 +229,17 @@ c.addEventListener('click', function(event) {
     	// nothing to be done
     }
     else if (goButton.clicked(screenX, screenY)) { // go button
-    	var g = myGraph.getItems();
+    	
     	// alert("Go pressed. Using " + sortType.getSelected() + " sort.");
-    	bubbleSort(g, 0, g.length);
+    	sorting = true;
+    	goButton.setBorder("#707070");
+		goButton.setColor("#909090");
+		goButton.draw();
+    	doSwaps(bubbleSort());
     }
     else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
     	myGraph.shuffle();
-    	myGraph.draw(-1);
+    	myGraph.draw([]);
     }
     else if (addButton.clicked(screenX, screenY)) { // add button
     	doAdd();
@@ -239,31 +250,49 @@ c.addEventListener('click', function(event) {
 
 }, false);
 
-function bubbleSort(items, i, length) {
-	// if done
-	if (length < 2) {
-		alert("Sorted");
-		return;
+function doSwaps(swaps) {
+	for (var i = 0; i < swaps.length; i++) {
+		setTimeout(swap, 100 * (i), swaps[i][0], swaps[i][1][0], swaps[i][1][1]);
 	}
+	setTimeout(endSwaps, 100 * swaps.length);
+}
 
-	// do the switch
-	if (items[i] > items[i + 1]) {
-		// alert("On index " + i + ", " + items[i] + " is greater than " + items[i + 1]);
-		var temp = items[i];
-		items[i] = items[i + 1];
-		items[i + 1] = temp;
-	}
+function endSwaps() {
+	sorting = false;
+	goButton.setBorder("#000000");
+	goButton.setColor("#20C010");
+	goButton.draw();
+	myGraph.draw([]);
+}
 
-	// visual update
-	myGraph.draw(i);
+function swap(bold, first, second) {
+	if (first !== -1 && second !== -1) {
+		var g = myGraph.getItems();
+		var temp = g[first];
+		g[first] = g[second];
+		g[second] = temp;
+	}
+	myGraph.draw(bold);
+}
 
-	// use setTimeout before next operation
-	if (i > length - 3) {
-		setTimeout(bubbleSort, 100, items, 0, length - 1);
+function bubbleSort() {
+	var swaps = []; // [[highlights], [swaps]]
+	var graphCopy = [...myGraph.getItems()];
+
+	for (var max = graphCopy.length - 1; max > -1; max--) {
+		for (var i = 0; i < max; i++) {
+			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) { // idk why parseInt is required
+				swaps.push([[i, i + 1], [i, i + 1]]);
+				var temp = graphCopy[i];
+				graphCopy[i] = graphCopy[i + 1];
+				graphCopy[i + 1] = temp;
+			}
+			else {
+				swaps.push([[i, i + 1], [-1, -1]]);
+			}
+		}
 	}
-	else {
-		setTimeout(bubbleSort, 100, items, i + 1, length);
-	}
+	return swaps;
 }
 
 

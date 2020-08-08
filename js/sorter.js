@@ -95,21 +95,23 @@ class Graph {
 		this.color = "#10FF10";
 		this.border = "#000000";
 	}
-	draw(bold) { // bold is an array of each bolded index
+	draw(bold) { // bold is an array of each bolded index (in order from least to greatest)
 		ctx.clearRect(this.left, this.top, this.width, this.height);
 		var length = this.items.length;
+		var boldIndex = 0;
 		for (var i = 0; i < length; i++) {
 			var x = this.left + i * this.width / length;
 			var tall = this.items[i] / length * this.height;
 			var y = this.top + this.height - tall;
 			ctx.fillStyle = this.border;
 			ctx.fillRect(x, y, this.width / length, tall);
-			ctx.fillStyle = this.color;
-			for (var j = 0; j < bold.length; j++) {
-				if (i === bold[j]) {
-					ctx.fillStyle = "#FF0000";
-					break;
-				}
+			if (i === bold[boldIndex]) {
+				ctx.fillStyle = "#FF0000";
+				if (boldIndex < bold.length - 1)
+					boldIndex++;
+			}
+			else {
+				ctx.fillStyle = this.color;
 			}
 			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
 		}
@@ -346,7 +348,7 @@ function insertionSort() {
 	for (var start = 1; start < graphCopy.length; start++) {
 		var i = start;
 		for (i = start; i > 0 && parseInt(graphCopy[i]) < parseInt(graphCopy[i - 1]); i--) {
-			swaps.push([[i, i - 1], [i, i - 1]]);
+			swaps.push([[i - 1, i], [i - 1, i]]);
 			var temp = graphCopy[i];
 			graphCopy[i] = graphCopy[i - 1];
 			graphCopy[i - 1] = temp;
@@ -372,6 +374,12 @@ function splitMerge(list, begin, end, mods) {
 }
 
 function merge (list, begin, middle, end, mods) {
+	var bold = [];
+	for (var i = begin; i <= end; i++) {
+		bold.push(i);
+	}
+	mods.push([bold, -1, -1]); // highlight the two parts that will be merged
+
 	var c1 = begin;
 	var c2 = middle + 1;
 	var tempList = [];

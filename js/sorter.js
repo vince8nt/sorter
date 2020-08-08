@@ -160,8 +160,8 @@ class Graph {
 // make visuals -------------------------------------------------------------------
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
-sortType.addButton(10, 480, 100, 50, "type 1");
-sortType.addButton(10, 540, 100, 50, "type 2");
+sortType.addButton(10, 480, 100, 50, "Bubble Sort");
+sortType.addButton(10, 540, 100, 50, "Insertion Sort");
 sortType.addButton(120, 480, 100, 50, "type 3");
 sortType.addButton(120, 540, 100, 50, "type 4");
 sortType.addButton(230, 480, 100, 50, "type 5");
@@ -235,7 +235,17 @@ c.addEventListener('click', function(event) {
     	goButton.setBorder("#707070");
 		goButton.setColor("#909090");
 		goButton.draw();
-    	doSwaps(bubbleSort());
+		if (sortType.getSelected() === "Bubble Sort")
+    		doSwaps(bubbleSort());
+    	else if (sortType.getSelected() === "Insertion Sort")
+    		doSwaps(insertionSort());
+    	else {
+    		goButton.setBorder("#000000");
+			goButton.setColor("#20C010");
+			goButton.draw();
+			alert("Invalid sorting algorithm.");
+			sorting = false;
+    	}
     }
     else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
     	myGraph.shuffle();
@@ -293,6 +303,22 @@ function bubbleSort() {
 			else {
 				swaps.push([[i, i + 1], [-1, -1]]);
 			}
+		}
+	}
+	return swaps;
+}
+
+function insertionSort() {
+	var swaps = []; // [[highlights], [swaps]]
+	var graphCopy = [...myGraph.getItems()];
+
+	for (var start = 1; start < graphCopy.length; start++) {
+		var i = start;
+		for (i = start; i > 0 && parseInt(graphCopy[i]) < parseInt(graphCopy[i - 1]); i--) {
+			swaps.push([[i, i - 1], [i, i - 1]]);
+			var temp = graphCopy[i];
+			graphCopy[i] = graphCopy[i - 1];
+			graphCopy[i - 1] = temp;
 		}
 	}
 	return swaps;

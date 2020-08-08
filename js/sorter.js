@@ -346,8 +346,8 @@ function insertionSort() {
 	var graphCopy = [...myGraph.getItems()];
 
 	for (var start = 1; start < graphCopy.length; start++) {
-		var i = start;
-		for (i = start; i > 0 && parseInt(graphCopy[i]) < parseInt(graphCopy[i - 1]); i--) {
+		swaps.push([[start - 1, start], [-1, -1]]);
+		for (var i = start; i > 0 && parseInt(graphCopy[i]) < parseInt(graphCopy[i - 1]); i--) {
 			swaps.push([[i - 1, i], [i - 1, i]]);
 			var temp = graphCopy[i];
 			graphCopy[i] = graphCopy[i - 1];

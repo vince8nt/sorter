@@ -162,7 +162,7 @@ class Graph {
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Insertion Sort");
-sortType.addButton(120, 480, 100, 50, "type 3");
+sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "type 4");
 sortType.addButton(230, 480, 100, 50, "type 5");
 sortType.addButton(230, 540, 100, 50, "type 6");
@@ -239,6 +239,8 @@ c.addEventListener('click', function(event) {
     		doSwaps(bubbleSort());
     	else if (sortType.getSelected() === "Insertion Sort")
     		doSwaps(insertionSort());
+    	else if (sortType.getSelected() === "Merge Sort")
+    		doMods(mergeSort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -269,15 +271,6 @@ function doSwaps(swaps) {
 	setTimeout(endSwaps, 100 * swaps.length, swaps.length, swapsNum);
 }
 
-function endSwaps(c, s) {
-	goButton.setBorder("#000000");
-	goButton.setColor("#20C010");
-	goButton.draw();
-	myGraph.draw([]);
-	alert("Array sorted: " + c + " comparisons, " + s + " swaps.");
-	sorting = false;
-}
-
 function swap(bold, first, second) {
 	if (first !== -1 && second !== -1) {
 		var g = myGraph.getItems();
@@ -288,8 +281,43 @@ function swap(bold, first, second) {
 	myGraph.draw(bold);
 }
 
+function endSwaps(c, s) {
+	goButton.setBorder("#000000");
+	goButton.setColor("#20C010");
+	goButton.draw();
+	myGraph.draw([]);
+	alert("Array sorted: " + c + " comparisons, " + s + " swaps.");
+	sorting = false;
+}
+
+function doMods(mods) {
+	var modsNum = 0;
+	for (var i = 0; i < mods.length; i++) {
+		setTimeout(modify, 100 * (i), mods[i][0], mods[i][1], mods[i][2]);
+		if (mods[i][1] !== -1) modsNum++;
+	}
+	setTimeout(endMods, 100 * mods.length, modsNum);
+}
+
+function modify(bold, index, value) {
+	if (index !== -1) {
+		myGraph.getItems()[index] = value;
+	}
+	myGraph.draw(bold);
+}
+
+function endMods(modsNum) {
+	goButton.setBorder("#000000");
+	goButton.setColor("#20C010");
+	goButton.draw();
+	myGraph.draw([]);
+	alert("Array sorted: " + modsNum + " modifications.");
+	sorting = false;
+}
+
+
 function bubbleSort() {
-	var swaps = []; // [[highlights], [swaps]]
+	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
 	for (var max = graphCopy.length - 1; max > -1; max--) {
@@ -312,7 +340,7 @@ function bubbleSort() {
 }
 
 function insertionSort() {
-	var swaps = []; // [[highlights], [swaps]]
+	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
 	for (var start = 1; start < graphCopy.length; start++) {
@@ -325,6 +353,50 @@ function insertionSort() {
 		}
 	}
 	return swaps;
+}
+
+function mergeSort() {
+	var mods = []; // [[[highlights], index, value], etc]
+	var graphCopy = [...myGraph.getItems()];
+	splitMerge(graphCopy, 0, graphCopy.length - 1, mods);
+	return mods;
+}
+
+function splitMerge(list, begin, end, mods) {
+	if (begin < end) {
+		var middle = Math.floor((begin + end) / 2);
+		splitMerge(list, begin, middle, mods);
+		splitMerge(list, middle + 1, end, mods);
+		merge(list, begin, middle, end, mods);
+	}
+}
+
+function merge (list, begin, middle, end, mods) {
+	var c1 = begin;
+	var c2 = middle + 1;
+	var tempList = [];
+	while (c1 <= middle && c2 <= end) {
+		if (parseInt(list[c1]) < parseInt(list[c2])) {
+			tempList.push(parseInt(list[c1]));
+			c1++;
+		}
+		else {
+			tempList.push(parseInt(list[c2]));
+			c2++;
+		}
+	}
+	while (c1 <= middle) {
+		tempList.push(parseInt(list[c1]));
+		 c1++;
+	}
+	while (c2 <= end) {
+		tempList.push(parseInt(list[c2]));
+		c2++;
+	}
+	for (var i = 0; i < tempList.length; i++) {
+		list[begin + i] = tempList[i];
+		mods.push([[begin + i], begin + i, tempList[i]]);
+	}
 }
 
 

@@ -169,7 +169,7 @@ sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Custom Sort");
-sortType.addButton(340, 540, 100, 50, "type 8");
+sortType.addButton(340, 540, 100, 50, "Custom Swap");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
@@ -251,6 +251,8 @@ c.addEventListener('click', function(event) {
     		doMods(countingSort());
     	else if (sortType.getSelected() === "Custom Sort")
     		doMods(customSort());
+    	else if (sortType.getSelected() === "Custom Swap")
+    		doSwaps(customSwap());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -578,7 +580,35 @@ function customSortR(list, depth, start, end, mods) {
 	}
 }
 
+function customSwap() {
+	// similar to customSort, but uses swaps to save memory
+	var swaps = []; // [[[highlights], [swaps]], etc]
+	var graphCopy = [...myGraph.getItems()];
 
+	var sigBit = Math.floor(Math.log(graphCopy.length) / Math.log(2));
+	var bitNum = Math.round(Math.pow(2, sigBit));
+	customSwapR(graphCopy, bitNum, 0, graphCopy.length - 1, swaps);
+	return swaps;
+}
+
+function customSwapR(list, bitNum, start, end, swaps) {
+	if (bitNum >= 1 && end - start > 0) {
+		var endBuffer = end;
+		for (var i = start; i <= endBuffer; i++) {
+			while((list[i] % 256) & (bitNum % 256) && i <= endBuffer) {
+				swaps.push([[i, endBuffer], [i, endBuffer]]);
+				var temp = list[i];
+				list[i] = list[endBuffer];
+				list[endBuffer] = temp;
+				endBuffer--;
+			}
+			if (i <= endBuffer)
+				swaps.push([[i, endBuffer], [-1, -1]]);
+		}
+		customSwapR(list, bitNum / 2, start, endBuffer, swaps);
+		customSwapR(list, bitNum / 2, endBuffer + 1, end, swaps);
+	}
+}
 
 
 

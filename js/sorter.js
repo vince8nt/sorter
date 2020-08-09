@@ -169,7 +169,7 @@ sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
-sortType.addButton(340, 540, 100, 50, "");
+sortType.addButton(340, 540, 100, 50, "Selection Sort");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
@@ -251,6 +251,8 @@ c.addEventListener('click', function(event) {
     		doMods(countingSort());
     	else if (sortType.getSelected() === "Binary Radix MSB")
     		doSwaps(binaryRadixMSB());
+    	else if (sortType.getSelected() === "Selection Sort")
+    		doSwaps(selectionSort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -537,6 +539,7 @@ function binaryRadixMSB() {
 	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
+	// graphCopy.length == graphCopy.maxValue
 	var sigBit = Math.floor(Math.log(graphCopy.length) / Math.log(2));
 	var bitNum = Math.round(Math.pow(2, sigBit));
 	binaryRadixMSBR(graphCopy, bitNum, 0, graphCopy.length - 1, swaps);
@@ -576,9 +579,27 @@ function binaryRadixMSBR(list, bitNum, start, end, swaps) {
 	}
 }
 
+function selectionSort() {
+	var swaps = []; // [[[highlights], [swaps]], etc]
+	var graphCopy = [...myGraph.getItems()];
 
-
-
+	for (var end = graphCopy.length - 1; end > 0; end--) {
+		var maxVal = -1,
+			maxInd = -1;
+		for (var i = 0; i <= end; i++) {
+			swaps.push([[i], [-1, -1]]);
+			if (parseInt(graphCopy[i]) > maxVal) {
+				maxVal = parseInt(graphCopy[i]);
+				maxInd = i;
+			}
+		}
+		swaps.push([[maxInd, end], [maxInd, end]]);
+		var temp = graphCopy[maxInd];
+		graphCopy[maxInd] = graphCopy[end];
+		graphCopy[end] = temp;
+	}
+	return swaps;
+}
 
 
 

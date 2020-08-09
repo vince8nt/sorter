@@ -168,8 +168,8 @@ sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
-sortType.addButton(340, 480, 100, 50, "Custom Sort");
-sortType.addButton(340, 540, 100, 50, "Custom Swap");
+sortType.addButton(340, 480, 100, 50, "Custom Swap");
+sortType.addButton(340, 540, 100, 50, "");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
@@ -249,8 +249,6 @@ c.addEventListener('click', function(event) {
     		doSwaps(quicksort());
     	else if (sortType.getSelected() === "Counting Sort")
     		doMods(countingSort());
-    	else if (sortType.getSelected() === "Custom Sort")
-    		doMods(customSort());
     	else if (sortType.getSelected() === "Custom Swap")
     		doSwaps(customSwap());
     	else {
@@ -533,51 +531,6 @@ function countingSort() {
 		}
 	}
 	return mods;
-}
-
-function customSort() {
-	// divide and conquer from most to least significant bit
-	// copies into two temp arrays
-	var mods = []; // [[[highlights], index, value], etc]
-	var graphCopy = [...myGraph.getItems()];
-
-	var depth = Math.floor(Math.log(graphCopy.length) / Math.log(2));
-	customSortR(graphCopy, depth, 0, graphCopy.length - 1, mods);
-	return mods;
-}
-
-function customSortR(list, depth, start, end, mods) {
-	if (depth >= 0 && end - start > 0) {
-		var middle = -1;
-		if (true) { // to save memory
-			var bit = Math.round(Math.pow(2, depth));
-			console.log("depth is " + depth);
-			console.log("bit is " + bit);
-			bit0 = [];
-			bit1 = [];
-			for (var i = start; i <= end; i++) {
-				if((list[i] % 256) & (bit % 256)) {
-					bit1.push(parseInt(list[i]));
-				}
-				else {
-					bit0.push(parseInt(list[i]));
-				}
-			}
-			var index = start;
-			for (var i = 0; i < bit0.length; i++) {
-				mods.push([[index], index, bit0[i]]);
-				list[index++] = bit0[i];
-			}
-			middle = index - 1;
-			for (var i = 0; i < bit1.length; i++) {
-				mods.push([[index], index, bit1[i]]);
-				list[index++] = bit1[i];
-			}
-		}
-		customSortR(list, depth - 1, start, middle, mods);
-		customSortR(list, depth - 1, middle + 1, end, mods);
-		
-	}
 }
 
 function customSwap() {

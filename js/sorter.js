@@ -167,7 +167,7 @@ sortType.addButton(10, 540, 100, 50, "Insertion Sort");
 sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
-sortType.addButton(230, 540, 100, 50, "type 6");
+sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "type 7");
 sortType.addButton(340, 540, 100, 50, "type 8");
 
@@ -247,6 +247,8 @@ c.addEventListener('click', function(event) {
     		doMods(mergeSort());
     	else if (sortType.getSelected() === "Quicksort")
     		doSwaps(quicksort());
+    	else if (sortType.getSelected() === "Counting Sort")
+    		doMods(countingSort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -502,6 +504,37 @@ function partition(list, begin, end, swaps) {
 		list[j] = temp;
 	}
 }
+
+function countingSort() {
+	var mods = []; // [[[highlights], index, value], etc]
+	var graphCopy = [...myGraph.getItems()];
+	var count = [];
+	for (var i = 0; i < graphCopy.length; i++) {
+		count.push(0);
+	}
+	for (var i = 0; i < graphCopy.length; i++) {
+		count[graphCopy[i] - 1]++;
+		mods.push([[i], -1, -1]);
+	}
+	for (var i = 1; i < count.length; i++) {
+		count[i] = count[i] + count[i - 1];
+		mods.push([[i - 1, i], -1, -1]);
+	}
+	var index = 0;
+	for (var i = 0; i < count.length; i++) {
+		while (index < count[i]) {
+			graphCopy[index] = i + 1;
+			mods.push([[index], index, i + 1]);
+			index++;
+		}
+	}
+	return mods;
+}
+
+
+
+
+
 
 
 

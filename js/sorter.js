@@ -168,7 +168,7 @@ sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
-sortType.addButton(340, 480, 100, 50, "type 7");
+sortType.addButton(340, 480, 100, 50, "Custom Sort");
 sortType.addButton(340, 540, 100, 50, "type 8");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
@@ -249,6 +249,8 @@ c.addEventListener('click', function(event) {
     		doSwaps(quicksort());
     	else if (sortType.getSelected() === "Counting Sort")
     		doMods(countingSort());
+    	else if (sortType.getSelected() === "Custom Sort")
+    		doMods(customSort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -529,6 +531,46 @@ function countingSort() {
 		}
 	}
 	return mods;
+}
+
+function customSort() {
+	var mods = []; // [[[highlights], index, value], etc]
+	var graphCopy = [...myGraph.getItems()];
+
+	var depth = Math.ceil(Math.log(graphCopy.length) / Math.log(2));
+	customSortR(graphCopy, depth, 0, graphCopy.length - 1, mods);
+	return mods;
+}
+
+function customSortR(list, depth, start, end, mods) {
+	if (depth >= 0) {
+		var middle = -1;
+		if (true) { // to save memory
+			var bit = Math.round(Math.pow(2, depth));
+			bit0 = [];
+			bit1 = [];
+			for (var i = start; i <= end; i++) {
+				if(parseInt(list[i]) & bit == 0) {
+					bit0.push(parseInt(list[i]));
+				}
+				else {
+					bit1.push(parseInt(list[i]));
+				}
+			}
+			var index = start;
+			for (var i = 0; i < bit0.length; i++) {
+				mods.push([[index], index, bit0[i]]);
+				list[index++] = bit0[i];
+			}
+			middle = index;
+			for (var i = 0; i < bit1.length; i++) {
+				mods.push([[index], index, bit1[i]]);
+				list[index++] = bit1[i];
+			}
+		}
+		customSortR(list, depth - 1, start, middle, mods);
+		customSortR(list, depth - 1, middle + 1, end, mods);
+	}
 }
 
 

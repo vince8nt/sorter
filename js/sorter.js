@@ -164,22 +164,24 @@ class Graph {
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Insertion Sort");
-sortType.addButton(120, 480, 100, 50, "Merge Sort");
+sortType.addButton(120, 480, 100, 50, "Selection Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
-sortType.addButton(340, 540, 100, 50, "Selection Sort");
+sortType.addButton(340, 540, 100, 50, "Merge Sort");
 
-shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
+shuffleButton = new Button(520, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
 
 goButton = new Button(800, 480, 190, 110, "Go", "#20C010", "#000000");
 goButton.draw();
 
-addButton = new Button(570, 480, 50, 50, "+", "#20C010", "#000000");
-subButton = new Button(570, 540, 50, 50, "-", "#C01010", "#000000");
+addButton = new Button(640, 510, 50, 50, "+", "#20C010", "#000000");
+sizeDisp = new Button(690, 510, 50, 50, 8, "#A0A0A0", "#A0A0A0");
+subButton = new Button(740, 510, 50, 50, "-", "#C01010", "#000000");
 addButton.draw();
+sizeDisp.draw();
 subButton.draw();
 
 myGraph = new Graph(10, 10, 980, 440);
@@ -196,6 +198,8 @@ function doAdd() {
 		subButton.draw();
 	}
 	if (myGraph.addCol()) {
+		sizeDisp.setLabel(sizeDisp.getLabel() + 1);
+		sizeDisp.draw();
 		myGraph.draw([]);
 		if (! myGraph.canAdd()) { // visually disable add button
 			addButton.setBorder("#707070");
@@ -212,6 +216,8 @@ function doSub() {
 		addButton.draw();
 	}
 	if (myGraph.removeCol()) {
+		sizeDisp.setLabel(sizeDisp.getLabel() - 1);
+		sizeDisp.draw();
 		myGraph.draw([]);
 		if (! myGraph.canSubtract()) { // visually disable sub button
 			subButton.setBorder("#707070");

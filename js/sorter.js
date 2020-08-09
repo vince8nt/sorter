@@ -471,18 +471,31 @@ function splitQuick(list, begin, end, swaps) {
 }
 
 function partition(list, begin, end, swaps) {
-	var pivot = parseInt(list[Math.floor((begin + end) / 2)]);
+	var pivotIndex = Math.floor((begin + end) / 2);
+	var pivot = parseInt(list[pivotIndex]);
 	var i = begin;
 	var j = end;
 	while (true) {
-		
-		while (parseInt(list[i]) < pivot) {
-			i++;
+		while (true) {
+			if (pivotIndex < i) swaps.push([[pivotIndex, i], [-1, -1]]);
+			else swaps.push([[i, pivotIndex], [-1, -1]]);
+			if (parseInt(list[i]) < pivot)
+				i++;
+			else
+				break;
 		}
-		while (parseInt(list[j]) > pivot) {
-			j--;
+		while (true) {
+			if (pivotIndex < j) swaps.push([[pivotIndex, j], [-1, -1]]);
+			else swaps.push([[j, pivotIndex], [-1, -1]]);
+			if (parseInt(list[j]) > pivot)
+				j--;
+			else
+				break;
 		}
-		if (i >= j) return j;
+		if (i >= j) {
+			swaps.push([[j, i], [-1, -1]]);
+			return j;
+		}
 		swaps.push([[i, j], [i, j]]);
 		var temp = list[i];
 		list[i] = list[j];

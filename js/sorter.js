@@ -166,7 +166,7 @@ sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Insertion Sort");
 sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
-sortType.addButton(230, 480, 100, 50, "type 5");
+sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "type 6");
 sortType.addButton(340, 480, 100, 50, "type 7");
 sortType.addButton(340, 540, 100, 50, "type 8");
@@ -245,6 +245,8 @@ c.addEventListener('click', function(event) {
     		doSwaps(insertionSort());
     	else if (sortType.getSelected() === "Merge Sort")
     		doMods(mergeSort());
+    	else if (sortType.getSelected() === "Quicksort")
+    		doSwaps(quicksort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -419,7 +421,7 @@ function splitMerge(list, begin, end, mods) {
 	}
 }
 
-function merge (list, begin, middle, end, mods) {
+function merge(list, begin, middle, end, mods) {
 	var bold = [];
 	for (var i = begin; i <= end; i++) {
 		bold.push(i);
@@ -450,6 +452,41 @@ function merge (list, begin, middle, end, mods) {
 	for (var i = 0; i < tempList.length; i++) {
 		list[begin + i] = tempList[i];
 		mods.push([[begin + i], begin + i, tempList[i]]);
+	}
+}
+
+function quicksort() {
+	var swaps = []; // [[[highlights], [swaps]], etc]
+	var graphCopy = [...myGraph.getItems()];
+	splitQuick(graphCopy, 0, graphCopy.length - 1, swaps);
+	return swaps;
+}
+
+function splitQuick(list, begin, end, swaps) {
+	if (begin < end) {
+		var p = partition(list, begin, end, swaps);
+		splitQuick(list, begin, p - 1, swaps);
+		splitQuick(list, p + 1, end, swaps);
+	}
+}
+
+function partition(list, begin, end, swaps) {
+	var pivot = parseInt(list[Math.floor((begin + end) / 2)]);
+	var i = begin;
+	var j = end;
+	while (true) {
+		
+		while (parseInt(list[i]) < pivot) {
+			i++;
+		}
+		while (parseInt(list[j]) > pivot) {
+			j--;
+		}
+		if (i >= j) return j;
+		swaps.push([[i, j], [i, j]]);
+		var temp = list[i];
+		list[i] = list[j];
+		list[j] = temp;
 	}
 }
 

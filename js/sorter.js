@@ -168,7 +168,7 @@ sortType.addButton(120, 480, 100, 50, "Merge Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
-sortType.addButton(340, 480, 100, 50, "Custom Swap");
+sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
 sortType.addButton(340, 540, 100, 50, "");
 
 shuffleButton = new Button(450, 480, 110, 110, "Shuffle", "#20C010", "#000000");
@@ -249,8 +249,8 @@ c.addEventListener('click', function(event) {
     		doSwaps(quicksort());
     	else if (sortType.getSelected() === "Counting Sort")
     		doMods(countingSort());
-    	else if (sortType.getSelected() === "Custom Swap")
-    		doSwaps(customSwap());
+    	else if (sortType.getSelected() === "Binary Radix MSB")
+    		doSwaps(binaryRadixMSB());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -533,33 +533,46 @@ function countingSort() {
 	return mods;
 }
 
-function customSwap() {
-	// similar to customSort, but uses swaps to save memory
+function binaryRadixMSB() {
 	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
 	var sigBit = Math.floor(Math.log(graphCopy.length) / Math.log(2));
 	var bitNum = Math.round(Math.pow(2, sigBit));
-	customSwapR(graphCopy, bitNum, 0, graphCopy.length - 1, swaps);
+	binaryRadixMSBR(graphCopy, bitNum, 0, graphCopy.length - 1, swaps);
 	return swaps;
 }
 
-function customSwapR(list, bitNum, start, end, swaps) {
+function binaryRadixMSBR(list, bitNum, start, end, swaps) {
 	if (bitNum >= 1 && end - start > 0) {
-		var endBuffer = end;
-		for (var i = start; i <= endBuffer; i++) {
-			while((list[i] % 256) & (bitNum % 256) && i <= endBuffer) {
-				swaps.push([[i, endBuffer], [i, endBuffer]]);
-				var temp = list[i];
-				list[i] = list[endBuffer];
-				list[endBuffer] = temp;
-				endBuffer--;
-			}
-			if (i <= endBuffer)
-				swaps.push([[i, endBuffer], [-1, -1]]);
+		var endIndex = end;
+		while (endIndex > start) {
+			swaps.push([[endIndex], [-1, -1]]);
+			if ((list[endIndex] % 256) & (bitNum % 256))
+				endIndex--;
+			else
+				break;
 		}
-		customSwapR(list, bitNum / 2, start, endBuffer, swaps);
-		customSwapR(list, bitNum / 2, endBuffer + 1, end, swaps);
+		for (var i = start; i < endIndex; i++) {
+			if ((list[i] % 256) & (bitNum % 256)) {
+				swaps.push([[i, endIndex], [i, endIndex]]);
+				var temp = list[i];
+				list[i] = list[endIndex];
+				list[endIndex] = temp;
+				endIndex--;
+				while (endIndex > i) {
+					swaps.push([[endIndex], [-1, -1]]);
+					if ((list[endIndex] % 256) & (bitNum % 256))
+						endIndex--;
+					else
+						break;
+				}
+			}
+			else
+				swaps.push([[i, endIndex], [-1, -1]]);
+		}
+		binaryRadixMSBR(list, bitNum / 2, start, endIndex, swaps);
+		binaryRadixMSBR(list, bitNum / 2, endIndex + 1, end, swaps);
 	}
 }
 

@@ -534,27 +534,31 @@ function countingSort() {
 }
 
 function customSort() {
+	// divide and conquer from most to least significant bit
+	// copies into two temp arrays
 	var mods = []; // [[[highlights], index, value], etc]
 	var graphCopy = [...myGraph.getItems()];
 
-	var depth = Math.ceil(Math.log(graphCopy.length) / Math.log(2));
+	var depth = Math.floor(Math.log(graphCopy.length) / Math.log(2));
 	customSortR(graphCopy, depth, 0, graphCopy.length - 1, mods);
 	return mods;
 }
 
 function customSortR(list, depth, start, end, mods) {
-	if (depth >= 0) {
+	if (depth >= 0 && end - start > 0) {
 		var middle = -1;
 		if (true) { // to save memory
 			var bit = Math.round(Math.pow(2, depth));
+			console.log("depth is " + depth);
+			console.log("bit is " + bit);
 			bit0 = [];
 			bit1 = [];
 			for (var i = start; i <= end; i++) {
-				if(parseInt(list[i]) & bit == 0) {
-					bit0.push(parseInt(list[i]));
+				if((list[i] % 256) & (bit % 256)) {
+					bit1.push(parseInt(list[i]));
 				}
 				else {
-					bit1.push(parseInt(list[i]));
+					bit0.push(parseInt(list[i]));
 				}
 			}
 			var index = start;
@@ -562,7 +566,7 @@ function customSortR(list, depth, start, end, mods) {
 				mods.push([[index], index, bit0[i]]);
 				list[index++] = bit0[i];
 			}
-			middle = index;
+			middle = index - 1;
 			for (var i = 0; i < bit1.length; i++) {
 				mods.push([[index], index, bit1[i]]);
 				list[index++] = bit1[i];
@@ -570,6 +574,7 @@ function customSortR(list, depth, start, end, mods) {
 		}
 		customSortR(list, depth - 1, start, middle, mods);
 		customSortR(list, depth - 1, middle + 1, end, mods);
+		
 	}
 }
 

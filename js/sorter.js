@@ -170,16 +170,18 @@ sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
 sortType.addButton(340, 540, 100, 50, "Merge Sort");
+sortType.addButton(450, 480, 100, 50, "");
+sortType.addButton(450, 540, 100, 50, "");
 
-shuffleButton = new Button(520, 480, 110, 110, "Shuffle", "#20C010", "#000000");
+shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
 
-goButton = new Button(800, 480, 190, 110, "Go", "#20C010", "#000000");
+goButton = new Button(840, 480, 150, 110, "Go", "#20C010", "#000000");
 goButton.draw();
 
-addButton = new Button(640, 510, 50, 50, "+", "#20C010", "#000000");
-sizeDisp = new Button(690, 510, 50, 50, 8, "#A0A0A0", "#A0A0A0");
-subButton = new Button(740, 510, 50, 50, "-", "#C01010", "#000000");
+addButton = new Button(680, 510, 50, 50, "+", "#20C010", "#000000");
+sizeDisp = new Button(730, 510, 50, 50, 8, "#A0A0A0", "#A0A0A0");
+subButton = new Button(780, 510, 50, 50, "-", "#C01010", "#000000");
 addButton.draw();
 sizeDisp.draw();
 subButton.draw();

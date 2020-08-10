@@ -296,14 +296,6 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Merge Sort")
     		doMods(mergeSort());
     	else if (sortType.getSelected() === "Quicksort") {
-    		if (duplicates) {
-    			alert("quicksort is currently not working with duplicate numbers");
-    			goButton.setBorder("#000000");
-				goButton.setColor("#20C010");
-				goButton.draw();
-				sorting = false;
-    		}
-    		else
     			doSwaps(quicksort());
     	}
     	else if (sortType.getSelected() === "Counting Sort")
@@ -533,42 +525,31 @@ function quicksort() {
 function splitQuick(list, begin, end, swaps) {
 	if (begin < end) {
 		var p = partition(list, begin, end, swaps);
+		console.log("Quicksort: partition is " + p);
 		splitQuick(list, begin, p - 1, swaps);
 		splitQuick(list, p + 1, end, swaps);
 	}
 }
 
 function partition(list, begin, end, swaps) {
-	var pivotIndex = Math.floor((begin + end) / 2);
-	var pivot = parseInt(list[pivotIndex]);
-	var i = begin;
-	var j = end;
-	while (true) {
-		while (true) {
-			if (pivotIndex < i) swaps.push([[pivotIndex, i], [-1, -1]]);
-			else swaps.push([[i, pivotIndex], [-1, -1]]);
-			if (parseInt(list[i]) < pivot)
-				i++;
-			else
-				break;
+	var pivot = parseInt(list[end]);
+	var i = begin - 1;
+	
+	for (var j = begin; j < end; j++) {
+		if (parseInt(list[j]) < pivot) {
+			i++;
+			swaps.push([[i, j], [i, j]]);
+			var temp = list[i];
+			list[i] = list[j];
+			list[j] = temp;
 		}
-		while (true) {
-			if (pivotIndex < j) swaps.push([[pivotIndex, j], [-1, -1]]);
-			else swaps.push([[j, pivotIndex], [-1, -1]]);
-			if (parseInt(list[j]) > pivot)
-				j--;
-			else
-				break;
-		}
-		if (i >= j) {
-			swaps.push([[j, i], [-1, -1]]);
-			return j;
-		}
-		swaps.push([[i, j], [i, j]]);
-		var temp = list[i];
-		list[i] = list[j];
-		list[j] = temp;
+		else swaps.push([[j], [-1, -1]]);
 	}
+	swaps.push([[i + 1, end], [i + 1, end]]);
+	var temp = list[i + 1];
+	list[i + 1] = list[end];
+	list[end] = temp;
+	return i + 1;
 }
 
 function countingSort() {

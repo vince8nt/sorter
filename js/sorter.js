@@ -188,7 +188,7 @@ sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
 sortType.addButton(340, 540, 100, 50, "Merge Sort");
 sortType.addButton(450, 480, 100, 50, "");
-sortType.addButton(450, 540, 100, 50, "");
+sortType.addButton(450, 540, 100, 50, "In-Place Merge");
 
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
@@ -294,10 +294,11 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Insertion Sort")
     		doSwaps(insertionSort());
     	else if (sortType.getSelected() === "Merge Sort")
-    		doMods(mergeSort());
-    	else if (sortType.getSelected() === "Quicksort") {
-    			doSwaps(quicksort());
-    	}
+    		doMods(mergeSort(false));
+    	else if (sortType.getSelected() === "In-Place Merge")
+    		doSwaps(mergeSort(true));
+    	else if (sortType.getSelected() === "Quicksort")
+    		doSwaps(quicksort());
     	else if (sortType.getSelected() === "Counting Sort")
     		doMods(countingSort());
     	else if (sortType.getSelected() === "Binary Radix MSB")
@@ -465,19 +466,48 @@ function insertionSort() {
 	return swaps;
 }
 
-function mergeSort() {
+function mergeSort(inPlace) {
 	var mods = []; // [[[highlights], index, value], etc]
 	var graphCopy = [...myGraph.getItems()];
-	splitMerge(graphCopy, 0, graphCopy.length - 1, mods);
+	splitMerge(graphCopy, 0, graphCopy.length - 1, mods, inPlace);
 	return mods;
 }
 
-function splitMerge(list, begin, end, mods) {
+function splitMerge(list, begin, end, mods, inPlace) {
 	if (begin < end) {
 		var middle = Math.floor((begin + end) / 2);
-		splitMerge(list, begin, middle, mods);
-		splitMerge(list, middle + 1, end, mods);
-		merge(list, begin, middle, end, mods);
+		splitMerge(list, begin, middle, mods, inPlace);
+		splitMerge(list, middle + 1, end, mods, inPlace);
+		if (inPlace)
+			inPlaceMerge(list, begin, middle, end, mods);
+		else
+			merge(list, begin, middle, end, mods);
+	}
+}
+
+function inPlaceMerge(list, begin, middle, end, mods) {
+	var bold = [];
+	for (var i = begin; i <= end; i++) {
+		bold.push(i);
+	}
+	mods.push([bold, -1, -1]); // highlight the two parts that will be merged
+
+	var c1 = begin;
+	var c2 = middle + 1;
+	while (c1 < c2) {
+		if (parseInt(list[c1]) > parseInt(list[c2])) {
+			mods.push([[c1, c2], [c1, c2]]);
+			var temp = list[c1];
+			list[c1] = list[c2];
+			list[c2] = temp;
+			for (var i = c2; i < end && parseInt(list[i]) > parseInt(list[i + 1]); i++) {
+				mods.push([[i, i + 1], [i, i + 1]]);
+				var temp = list[i];
+				list[i] = list[i + 1];
+				list[i + 1] = temp;
+			}
+		}
+		c1++;
 	}
 }
 

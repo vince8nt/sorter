@@ -161,6 +161,9 @@ class Graph {
 
 // make visuals -------------------------------------------------------------------
 
+myGraph = new Graph(10, 10, 980, 440);
+myGraph.draw([]);
+
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Insertion Sort");
@@ -176,20 +179,21 @@ sortType.addButton(450, 540, 100, 50, "");
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 shuffleButton.draw();
 
-goButton = new Button(840, 480, 150, 110, "Go", "#20C010", "#000000");
-goButton.draw();
+dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
+dupButton.draw();
 
-addButton = new Button(680, 510, 50, 50, "+", "#20C010", "#000000");
-sizeDisp = new Button(730, 510, 50, 50, 8, "#A0A0A0", "#A0A0A0");
-subButton = new Button(780, 510, 50, 50, "-", "#C01010", "#000000");
+addButton = new Button(780, 540, 50, 50, "+", "#20C010", "#000000");
+sizeDisp = new Button(730, 540, 50, 50, 8, "#A0A0A0", "#A0A0A0");
+subButton = new Button(680, 540, 50, 50, "-", "#C01010", "#000000");
 addButton.draw();
 sizeDisp.draw();
 subButton.draw();
 
-myGraph = new Graph(10, 10, 980, 440);
-myGraph.draw([]);
+goButton = new Button(840, 480, 150, 110, "Go", "#20C010", "#000000");
+goButton.draw();
 
 var sorting = false;
+var duplicates = false;
 
 // program starts here ------------------------------------------------------------
 
@@ -227,6 +231,21 @@ function doSub() {
 			subButton.draw();
 		}
 	}
+}
+
+function clickDups() {
+	if (duplicates) {
+		dupButton.setColor("#C01010");
+		dupButton.setLabel("duplicates: off");
+		dupButton.draw();
+		duplicates = false;
+    }
+    else {
+    	dupButton.setColor("#20C010");
+		dupButton.setLabel("duplicates: on");
+		dupButton.draw();
+		duplicates = true;
+    }
 }
 
 c.addEventListener('click', function(event) {
@@ -278,6 +297,9 @@ c.addEventListener('click', function(event) {
     }
     else if (subButton.clicked(screenX, screenY)) { // subtract button
     	doSub();
+    }
+    else if (dupButton.clicked(screenX, screenY)) { // duplicates button
+    	clickDups();
     }
 
 }, false);

@@ -154,6 +154,20 @@ class Graph {
 		}
 		this.items = tempItems;
 	}
+	sort() {
+		var length = this.items.length;
+		this.items = [];
+		for (var i = 0; i < length; i++) {
+			this.items.push(i + 1);
+		}
+	}
+	makeDups() {
+		for (var i = 1; i < this.items.length; i++) {
+			if (Math.random() < 0.5) {
+				this.items[i]--;
+			}
+		}
+	}
 	getItems() {
 		return this.items;
 	}
@@ -206,6 +220,8 @@ function doAdd() {
 	if (myGraph.addCol()) {
 		sizeDisp.setLabel(sizeDisp.getLabel() + 1);
 		sizeDisp.draw();
+		if (duplicates)
+			myGraph.makeDups();
 		myGraph.draw([]);
 		if (! myGraph.canAdd()) { // visually disable add button
 			addButton.setBorder("#707070");
@@ -224,6 +240,8 @@ function doSub() {
 	if (myGraph.removeCol()) {
 		sizeDisp.setLabel(sizeDisp.getLabel() - 1);
 		sizeDisp.draw();
+		if (duplicates)
+			myGraph.makeDups();
 		myGraph.draw([]);
 		if (! myGraph.canSubtract()) { // visually disable sub button
 			subButton.setBorder("#707070");
@@ -235,16 +253,21 @@ function doSub() {
 
 function clickDups() {
 	if (duplicates) {
+		duplicates = false;
 		dupButton.setColor("#C01010");
 		dupButton.setLabel("duplicates: off");
+		myGraph.sort();
 		dupButton.draw();
-		duplicates = false;
+		myGraph.draw([]);
     }
     else {
+    	duplicates = true;
     	dupButton.setColor("#20C010");
 		dupButton.setLabel("duplicates: on");
+		myGraph.sort();
+		myGraph.makeDups();
 		dupButton.draw();
-		duplicates = true;
+		myGraph.draw([]);
     }
 }
 
@@ -272,8 +295,17 @@ c.addEventListener('click', function(event) {
     		doSwaps(insertionSort());
     	else if (sortType.getSelected() === "Merge Sort")
     		doMods(mergeSort());
-    	else if (sortType.getSelected() === "Quicksort")
-    		doSwaps(quicksort());
+    	else if (sortType.getSelected() === "Quicksort") {
+    		if (duplicates) {
+    			alert("quicksort is currently not working with duplicate numbers");
+    			goButton.setBorder("#000000");
+				goButton.setColor("#20C010");
+				goButton.draw();
+				sorting = false;
+    		}
+    		else
+    			doSwaps(quicksort());
+    	}
     	else if (sortType.getSelected() === "Counting Sort")
     		doMods(countingSort());
     	else if (sortType.getSelected() === "Binary Radix MSB")

@@ -486,28 +486,27 @@ function splitMerge(list, begin, end, mods, inPlace) {
 }
 
 function inPlaceMerge(list, begin, middle, end, mods) {
-	var bold = [];
-	for (var i = begin; i <= end; i++) {
-		bold.push(i);
-	}
-	mods.push([bold, -1, -1]); // highlight the two parts that will be merged
-
-	var c1 = begin;
-	var c2 = middle + 1;
-	while (c1 < c2) {
-		if (parseInt(list[c1]) > parseInt(list[c2])) {
-			mods.push([[c1, c2], [c1, c2]]);
-			var temp = list[c1];
-			list[c1] = list[c2];
-			list[c2] = temp;
-			for (var i = c2; i < end && parseInt(list[i]) > parseInt(list[i + 1]); i++) {
-				mods.push([[i, i + 1], [i, i + 1]]);
-				var temp = list[i];
-				list[i] = list[i + 1];
-				list[i + 1] = temp;
+	for (middle++; begin < middle; begin++) {
+		if (parseInt(list[begin]) > parseInt(list[middle])) {
+			mods.push([[begin, middle], [begin, middle]]);
+			var temp = list[begin];
+			list[begin] = list[middle];
+			list[middle] = temp;
+			for (var i = middle; i < end; i++) {
+				if (parseInt(list[i]) > parseInt(list[i + 1])) {
+					mods.push([[i, i + 1], [i, i + 1]]);
+					var temp = list[i];
+					list[i] = list[i + 1];
+					list[i + 1] = temp;
+				}
+				else {
+					mods.push([[i, i + 1], [-1, -1]]);
+					break;
+				}
 			}
 		}
-		c1++;
+		else
+			mods.push([[begin, middle], [-1, -1]]);
 	}
 }
 

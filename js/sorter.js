@@ -412,39 +412,48 @@ function cocktailShaker() { // bidirectional bubble sort
 	var swaps = []; // [[[highlights], [swaps]], etc]
 	var graphCopy = [...myGraph.getItems()];
 
+	const end = graphCopy.length - 1;
 	var min = 0;
-	var max = graphCopy.length - 1;
+	var max = end;
+	var lastSwap;
 	while (min < max) {
-		var noSwaps = true;
-		for (var i = min; i < max; i++) {
+		lastSwap = -1;
+		for (var i = min; i < end; i++) {
 			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) {
 				swaps.push([[i, i + 1], [i, i + 1]]);
 				var temp = graphCopy[i];
 				graphCopy[i] = graphCopy[i + 1];
 				graphCopy[i + 1] = temp;
-				noSwaps = false;
+				lastSwap = i;
 			}
 			else {
 				swaps.push([[i, i + 1], [-1, -1]]);
+				if (i > max - 2)
+					break;
 			}
+			
 		}
-		if (noSwaps) return swaps;
-		noSwaps = true;
-		max--;
-		for (var i = max; i > min; i--) {
+		// console.log("end bubble right: max = " + lastSwap);
+		max = lastSwap;
+
+
+		lastSwap = end + 1;
+		for (var i = max; i > 0; i--) {
 			if (parseInt(graphCopy[i - 1]) > parseInt(graphCopy[i])) {
 				swaps.push([[i - 1, i], [i - 1, i]]);
 				var temp = graphCopy[i - 1];
 				graphCopy[i - 1] = graphCopy[i];
 				graphCopy[i] = temp;
-				noSwaps = false;
+				lastSwap = i;
 			}
 			else {
 				swaps.push([[i - 1, i], [-1, -1]]);
+				if (i < min + 2)
+					break;
 			}
 		}
-		if (noSwaps) return swaps;
-		min++;
+		// console.log("end bubble left: min = " + lastSwap);
+		min = lastSwap;
 	}
 	return swaps;
 }

@@ -187,7 +187,7 @@ sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Counting Sort");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
 sortType.addButton(340, 540, 100, 50, "Merge Sort");
-sortType.addButton(450, 480, 100, 50, "");
+sortType.addButton(450, 480, 100, 50, "Heap Sort");
 sortType.addButton(450, 540, 100, 50, "In-Place Merge");
 
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
@@ -305,6 +305,8 @@ c.addEventListener('click', function(event) {
     		doSwaps(binaryRadixMSB());
     	else if (sortType.getSelected() === "Selection Sort")
     		doSwaps(selectionSort());
+    	else if (sortType.getSelected() === "Heap Sort")
+    		doSwaps(heapSort());
     	else {
     		goButton.setBorder("#000000");
 			goButton.setColor("#20C010");
@@ -554,7 +556,7 @@ function quicksort() {
 function splitQuick(list, begin, end, swaps) {
 	if (begin < end) {
 		var p = partition(list, begin, end, swaps);
-		console.log("Quicksort: partition is " + p);
+		// console.log("Quicksort: partition is " + p);
 		splitQuick(list, begin, p - 1, swaps);
 		splitQuick(list, p + 1, end, swaps);
 	}
@@ -671,6 +673,52 @@ function selectionSort() {
 		graphCopy[end] = temp;
 	}
 	return swaps;
+}
+
+var heapLength;
+
+function heapSort() {
+	var swaps = []; // [[[highlights], [swaps]], etc]
+	var graphCopy = [...myGraph.getItems()];
+
+	heapLength = graphCopy.length;
+
+	for (var i = Math.floor(heapLength / 2); i >= 0; i--) {
+		heapRoot(graphCopy, i, swaps);
+	}
+	for (var i = graphCopy.length - 1; i > 0; i--) {
+		swaps.push([[0, i], [0, i]]);
+		var temp = graphCopy[0];
+		graphCopy[0] = graphCopy[i];
+		graphCopy[i] = temp;
+		heapLength--;
+		heapRoot(graphCopy, 0, swaps);
+	}
+	return swaps;
+}
+
+function heapRoot(list, index, swaps) {
+	var left = 2 * index + 1;
+	var right = 2 * index + 2;
+	var max = index;
+
+	if (left < heapLength) {
+		swaps.push([[max, left], [-1, -1]]);
+		if (parseInt(list[left]) > parseInt(list[max]))
+			max = left;
+	}
+	if (right < heapLength) {
+		swaps.push([[max, right], [-1, -1]]);
+		if (parseInt(list[right]) > parseInt(list[max]))
+			max = right;
+	}
+	if (max != index) {
+		swaps.push([[max, index], [max, index]]);
+		var temp = list[max];
+		list[max] = list[index];
+		list[index] = temp;
+		heapRoot(list, max, swaps);
+	}
 }
 
 

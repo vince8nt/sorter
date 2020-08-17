@@ -2,12 +2,79 @@
 <html>
 	<head>
 		<title>Sorter</title>
+		<style>
+			body {
+				background-color: black;
+				background-image: url("images/clouds.svg");
+				background-size: 100%;
+				background-repeat: no-repeat;
+				margin: 0px;
+				color: #30D020;
+				font-family: Arial;
+			}
+			.myButton {
+				width: auto;
+				padding: 4px;
+				border: solid #30D020 2px;
+				border-radius: 8px;
+				background-color: #30D020;
+				color: #000000;
+				text-decoration: none;
+				transition: all 0.2s;
+
+			}
+			.myButton:hover {
+				background-color: #000000;
+				color: #30D020;
+			}
+		</style>
 	</head>
-	<body style = "background-color: lightblue;">
-		<center>
-			<canvas id = "sorterContainer" width = "1000" height = "600" style = "border: solid black 4px; background-color: white;">
-			</canvas>
-		</center>
+	<body>
+		<div style="margin: 5px; margin-top: 30px;">
+			<a class="myButton" style="margin-left: 40px; font-family: Arial Black;" href="https://vince8nt.github.io/">Home</a>
+			<center>
+				<h1 style="font-family: Arial Black; color: white;">Sorter</h1>
+				
+				<h2 style="font-family: Arial Black;">by Vincent Titterton</h2>
+				<canvas id="sorterContainer" width="1000" height="600" style="background-color: white;">
+				</canvas>
+				
+				<h2 style="font-family: Arial Black;">About this project</h2>
+				<div style="border: solid #30D020 4px; border-radius: 8px; width: 600px; padding: 20px; background-color: #D8D8D8;">
+					<a class="myButton" href="https://github.com/vince8nt/sorter" target="_blank">Source Code</a>
+					<div style="text-align: left; color: black; margin-top: 8px;">
+						<a>Language: JavaScript <br> Framework: HTML Canvas</a>
+						<p>A sorting program. Includes a graph of adjustable size and a GUI made with a custom button class. Ten different sorting algorithms are available to choose from. The sorting process is done with individual frames for each array operation. After each sort is complete, runtime statistics are displayed.</p>
+					</div>
+					<hr>
+					<a style="font-family: Arial Black; color: #381bff;">Try my other JavaScript Projects:</a>
+					<br>
+					<br>
+					<a class="myButton" href="https://vince8nt.github.io/minesweeper/">Minesweeper</a>
+					<a class="myButton" href="https://vince8nt.github.io/Path-Finder/">Path Finder</a>
+				</div>
+				
+			</center>
+		</div>
+
+		<!-- footer -->
+		<div style = "width: fill; border-top: solid #30D020 4px; border-left: 0px; background-color: #381bff; padding: 25px; margin-top: 60px;">
+			<a style = "color: white; font-family: Arial Black;">© 2020 Vincent Titterton.</a>
+		</div>
+
 		<script src="js/sorter.js"></script>
 	</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+

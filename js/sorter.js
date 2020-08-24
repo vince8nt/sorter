@@ -367,19 +367,26 @@ function endSwaps(c, s) {
 }
 
 function doMods(mods) {
-	var modsNum = 0;
-	for (var i = 0; i < mods.length; i++) {
-		setTimeout(modify, 100 * (i), mods[i][0], mods[i][1], mods[i][2]);
-		if (mods[i][1] !== -1) modsNum++;
-	}
-	setTimeout(endMods, 100 * mods.length, modsNum);
+	var g = myGraph.getItems();
+	var delay = 1500 / g.length;
+	setTimeout(modify, 100, mods, 0, delay, 0);
 }
 
-function modify(bold, index, value) {
-	if (index !== -1) {
-		myGraph.getItems()[index] = value;
+function modify(mods, i, delay, modsNum) {
+	if (i < mods.length) {
+		var bold = mods[i][0],
+			index = mods[i][1],
+			value = mods[i][2];
+		if (index !== -1) {
+			myGraph.getItems()[index] = value;
+			modsNum++;
+		}
+		myGraph.draw(bold);
+		setTimeout(modify, delay, mods, i + 1, delay, modsNum);
 	}
-	myGraph.draw(bold);
+	else {
+		setTimeout(endMods, delay, modsNum);
+	}
 }
 
 function endMods(modsNum) {

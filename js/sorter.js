@@ -332,22 +332,35 @@ c.addEventListener('click', function(event) {
 }, false);
 
 function doSwaps(swaps) {
+	/*
 	var swapsNum = 0;
 	for (var i = 0; i < swaps.length; i++) {
 		setTimeout(swap, 100 * (i), swaps[i][0], swaps[i][1][0], swaps[i][1][1]);
 		if (swaps[i][1][0] !== -1) swapsNum++;
 	}
 	setTimeout(endSwaps, 100 * swaps.length, swaps.length, swapsNum);
+	*/
+	setTimeout(swap, 100, swaps, 0, 100, 0);
 }
 
-function swap(bold, first, second) {
-	if (first !== -1 && second !== -1) {
-		var g = myGraph.getItems();
-		var temp = g[first];
-		g[first] = g[second];
-		g[second] = temp;
+function swap(swaps, i, delay, swapsNum) {
+	if (i < swaps.length) {
+		var bold = swaps[i][0],
+			first = swaps[i][1][0],
+			second = swaps[i][1][1];
+		if (first !== -1 && second !== -1) {
+			var g = myGraph.getItems();
+			var temp = g[first];
+			g[first] = g[second];
+			g[second] = temp;
+			swapsNum++;
+		}
+		myGraph.draw(bold);
+		setTimeout(swap, delay, swaps, i + 1, delay, swapsNum);
 	}
-	myGraph.draw(bold);
+	else {
+		setTimeout(endSwaps, delay, swaps.length, swapsNum);
+	}
 }
 
 function endSwaps(c, s) {

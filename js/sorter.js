@@ -332,15 +332,9 @@ c.addEventListener('click', function(event) {
 }, false);
 
 function doSwaps(swaps) {
-	/*
-	var swapsNum = 0;
-	for (var i = 0; i < swaps.length; i++) {
-		setTimeout(swap, 100 * (i), swaps[i][0], swaps[i][1][0], swaps[i][1][1]);
-		if (swaps[i][1][0] !== -1) swapsNum++;
-	}
-	setTimeout(endSwaps, 100 * swaps.length, swaps.length, swapsNum);
-	*/
-	setTimeout(swap, 100, swaps, 0, 100, 0);
+	var g = myGraph.getItems();
+	var delay = 1500 / g.length;
+	setTimeout(swap, 100, swaps, 0, delay, 0);
 }
 
 function swap(swaps, i, delay, swapsNum) {

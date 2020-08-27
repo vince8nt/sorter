@@ -22,7 +22,7 @@ function minHeapSort(arr) {
 		swap(arr, 0, i, mods);
 		minHeapify(arr, 0, i, 0, mods);
 	}
-	// reverse(arr, 0, arr.length - 1, mods);
+	reverse(arr, 0, arr.length - 1, mods);
 
 	return mods;
 }

@@ -41,3 +41,8 @@ function getIndex(arr, index, mods) { // 1 read
 	mods.push(["read", index]);
 	return arr[index];
 }
+
+function reverse(arr, begin, end, mods) {
+	while (begin < end)
+		swap(arr, begin++, end--, mods);
+}

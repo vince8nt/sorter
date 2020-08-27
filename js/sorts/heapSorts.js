@@ -16,12 +16,14 @@ function maxHeapSort(arr) {
 
 function minHeapSort(arr) {
 	var mods = [];
+
 	buildMinHeap(arr, 0, arr.length - 1, mods);
 	for (var i = arr.length - 1; i > 0; i--) {
 		swap(arr, 0, i, mods);
 		minHeapify(arr, 0, i, 0, mods);
 	}
 	// reverse(arr, 0, arr.length - 1, mods);
+
 	return mods;
 }
 
@@ -70,6 +72,33 @@ function medianHeapSortR(arr, begin, end, mods) {
 
 
 
+
+// creates a max heap on the sub-array of arr
+function buildMaxHeap(arr, begin, end, mods) {
+	var n = end - begin + 1;
+	for (var i = Math.floor(n / 2) - 1 + begin; i >= begin; i--)
+		maxHeapify(arr, begin, n, i, mods);
+}
+
+// heapify the sub-tree at root of the sub-array
+function maxHeapify(arr, start, size, root, mods) {
+	var largest = root;
+	var l = 2 * root - start + 1; // left child of root
+	var r = 2 * root - start + 2; // right child of root
+
+	// set largest to the largest of the root and its 2 children (l and r)
+	if (l < start + size && lessThan(arr, largest, l, mods))
+		largest = l;
+	if (r < start + size && lessThan(arr, largest, r, mods))
+		largest = r;
+
+	if (largest != root) {
+		// swap arr[root] and arr[largest]
+		swap(arr, root, largest, mods);
+		// heapify the subtree
+		maxHeapify(arr, start, size, largest, mods);
+	}
+}
 
 // creates a min heap on the sub-array of arr
 function buildMinHeap(arr, begin, end, mods) {

@@ -335,8 +335,8 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "-In-Place Merge") {
     		doSwaps(mergeSort(true));
     	}
-    	else if (sortType.getSelected() === "-Quicksort") {
-    		doSwaps(quicksort());
+    	else if (sortType.getSelected() === "Quicksort") {
+    		doMods(quicksort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-Counting Sort") {
     		doMods(countingSort());
@@ -472,42 +472,7 @@ function merge(list, begin, middle, end, mods) {
 	}
 }
 
-function quicksort() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
-	splitQuick(graphCopy, 0, graphCopy.length - 1, swaps);
-	return swaps;
-}
 
-function splitQuick(list, begin, end, swaps) {
-	if (begin < end) {
-		var p = partition(list, begin, end, swaps);
-		// console.log("Quicksort: partition is " + p);
-		splitQuick(list, begin, p - 1, swaps);
-		splitQuick(list, p + 1, end, swaps);
-	}
-}
-
-function partition(list, begin, end, swaps) {
-	var pivot = parseInt(list[end]);
-	var i = begin - 1;
-	
-	for (var j = begin; j < end; j++) {
-		if (parseInt(list[j]) < pivot) {
-			i++;
-			swaps.push([[i, j], [i, j]]);
-			var temp = list[i];
-			list[i] = list[j];
-			list[j] = temp;
-		}
-		else swaps.push([[j], [-1, -1]]);
-	}
-	swaps.push([[i + 1, end], [i + 1, end]]);
-	var temp = list[i + 1];
-	list[i + 1] = list[end];
-	list[end] = temp;
-	return i + 1;
-}
 
 function countingSort() {
 	var mods = []; // [[[highlights], index, value], etc]

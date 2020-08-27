@@ -196,7 +196,7 @@ sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
 sortType.addButton(230, 540, 100, 50, "Min Max Selection");
 sortType.addButton(340, 480, 100, 50, "Min Heap Sort");
-sortType.addButton(340, 540, 100, 50, "Merge Sort");
+sortType.addButton(340, 540, 100, 50, "Reverse Min Heap");
 sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
 sortType.addButton(450, 540, 100, 50, "In-Place Merge");
 
@@ -329,8 +329,8 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Gnome Sort") {
     		doMods(gnomeSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "-Merge Sort") {
-    		
+    	else if (sortType.getSelected() === "Reverse Min Heap") {
+    		doMods(backMinHeapSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-In-Place Merge") {
     		

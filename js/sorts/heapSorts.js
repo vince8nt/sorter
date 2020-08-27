@@ -27,6 +27,18 @@ function minHeapSort(arr) {
 	return mods;
 }
 
+function backMinHeapSort(arr) {
+	var mods = [];
+
+	buildBackMinHeap(arr, 0, arr.length - 1, mods);
+	for (var i = 0; i < arr.length; i++) {
+		swap(arr, i, arr.length - 1, mods);
+		backMinHeapify(arr, arr.length - 1, arr.length - 1 - i, arr.length - 1, mods);
+	}
+
+	return mods;
+}
+
 function medianHeapSort(arr) {
 	var mods = [];
 	medianHeapSort2R(arr, 0, arr.length - 1, mods);
@@ -147,9 +159,34 @@ function backMaxHeapify(arr, end, size, root, mods) {
 		largest = r;
 
 	if (largest != root) {
-		// swap arr[root] and arr[largest]
 		swap(arr, root, largest, mods);
 		// heapify the subtree
 		backMaxHeapify(arr, end, size, largest, mods);
+	}
+}
+
+// creates a backwards min heap on the sub-array of arr
+function buildBackMinHeap(arr, begin, end, mods) {
+	var n = end - begin + 1;
+	for (var i = Math.floor((n + 1) / 2) + begin; i <= end; i++)
+		backMinHeapify(arr, end, n, i, mods);
+}
+
+// heapify the sub-tree at root of the sub-array
+function backMinHeapify(arr, end, size, root, mods) {
+	var smallest = root;
+	var l = 2 * root - end - 1; // left child of root
+	var r = 2 * root - end - 2; // right child of root
+
+	// set smallest to the smallest of the root and its 2 children (l and r)
+	if (l > end - size && lessThan(arr, l, smallest, mods))
+		smallest = l;
+	if (r > end - size && lessThan(arr, r, smallest, mods))
+		smallest = r;
+
+	if (smallest != root) {
+		swap(arr, root, smallest, mods);
+		// heapify the subtree
+		backMinHeapify(arr, end, size, smallest, mods);
 	}
 }

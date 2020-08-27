@@ -31,8 +31,6 @@ function minMaxSelectionSort(arr) {
 				min = getIndex(arr, minIndex, mods);
 			}
 		}
-
-		// shift the min
 		swap(arr, front, minIndex, mods);
 		if (valEqualsIndex(arr, max, minIndex, mods))
 			swap(arr, back, minIndex, mods);

@@ -347,8 +347,8 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Selection Sort") {
     		doMods(selectionSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "-Heap Sort") {
-    		
+    	else if (sortType.getSelected() === "Heap Sort") {
+    		doMods(minHeapSort(myGraph.getItems()));
     	}
     	else {
     		enableButtons();
@@ -546,51 +546,7 @@ function binaryRadixMSBR(list, bitNum, start, end, swaps) {
 
 
 
-var heapLength;
 
-function heapSort() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
-
-	heapLength = graphCopy.length;
-
-	for (var i = Math.floor(heapLength / 2); i >= 0; i--) {
-		heapRoot(graphCopy, i, swaps);
-	}
-	for (var i = graphCopy.length - 1; i > 0; i--) {
-		swaps.push([[0, i], [0, i]]);
-		var temp = graphCopy[0];
-		graphCopy[0] = graphCopy[i];
-		graphCopy[i] = temp;
-		heapLength--;
-		heapRoot(graphCopy, 0, swaps);
-	}
-	return swaps;
-}
-
-function heapRoot(list, index, swaps) {
-	var left = 2 * index + 1;
-	var right = 2 * index + 2;
-	var max = index;
-
-	if (left < heapLength) {
-		swaps.push([[max, left], [-1, -1]]);
-		if (parseInt(list[left]) > parseInt(list[max]))
-			max = left;
-	}
-	if (right < heapLength) {
-		swaps.push([[max, right], [-1, -1]]);
-		if (parseInt(list[right]) > parseInt(list[max]))
-			max = right;
-	}
-	if (max != index) {
-		swaps.push([[max, index], [max, index]]);
-		var temp = list[max];
-		list[max] = list[index];
-		list[index] = temp;
-		heapRoot(list, max, swaps);
-	}
-}
 
 
 

@@ -111,7 +111,7 @@ class Graph {
 		this.setLength(30);
 		this.lastHighlight = [];
 	}
-	draw() { // bold is an array of each bolded index (in order from least to greatest)
+	draw() {
 		for (var i = 0; i < this.items.length; i++) {
 			this.drawIndex(i, this.color);
 		}
@@ -330,25 +330,25 @@ c.addEventListener('click', function(event) {
     		doMods(gnomeSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-Merge Sort") {
-    		doMods(mergeSort(false));
+    		
     	}
     	else if (sortType.getSelected() === "-In-Place Merge") {
-    		doSwaps(mergeSort(true));
+    		
     	}
     	else if (sortType.getSelected() === "Quicksort") {
     		doMods(quicksort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-Counting Sort") {
-    		doMods(countingSort());
+    		
     	}
     	else if (sortType.getSelected() === "-Binary Radix MSB") {
-    		doSwaps(binaryRadixMSB());
+    		
     	}
-    	else if (sortType.getSelected() === "-Selection Sort") {
-    		doSwaps(selectionSort());
+    	else if (sortType.getSelected() === "Selection Sort") {
+    		doMods(selectionSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-Heap Sort") {
-    		doSwaps(heapSort());
+    		
     	}
     	else {
     		enableButtons();
@@ -544,27 +544,7 @@ function binaryRadixMSBR(list, bitNum, start, end, swaps) {
 	}
 }
 
-function selectionSort() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
 
-	for (var end = graphCopy.length - 1; end > 0; end--) {
-		var maxVal = -1,
-			maxInd = -1;
-		for (var i = 0; i <= end; i++) {
-			swaps.push([[i], [-1, -1]]);
-			if (parseInt(graphCopy[i]) > maxVal) {
-				maxVal = parseInt(graphCopy[i]);
-				maxInd = i;
-			}
-		}
-		swaps.push([[maxInd, end], [maxInd, end]]);
-		var temp = graphCopy[maxInd];
-		graphCopy[maxInd] = graphCopy[end];
-		graphCopy[end] = temp;
-	}
-	return swaps;
-}
 
 var heapLength;
 

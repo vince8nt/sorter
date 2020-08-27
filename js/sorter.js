@@ -194,7 +194,7 @@ sortType.addButton(10, 540, 100, 50, "Gnome Sort");
 sortType.addButton(120, 480, 100, 50, "Selection Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
-sortType.addButton(230, 540, 100, 50, "Counting Sort");
+sortType.addButton(230, 540, 100, 50, "Min Max Selection");
 sortType.addButton(340, 480, 100, 50, "Binary Radix MSB");
 sortType.addButton(340, 540, 100, 50, "Merge Sort");
 sortType.addButton(450, 480, 100, 50, "Heap Sort");
@@ -338,8 +338,8 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Quicksort") {
     		doMods(quicksort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "-Counting Sort") {
-    		
+    	else if (sortType.getSelected() === "Min Max Selection") {
+    		doMods(minMaxSelectionSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "-Binary Radix MSB") {
     		

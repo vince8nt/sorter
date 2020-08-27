@@ -27,6 +27,11 @@ function valLessThanVal(arr, value1, value2, mods) { // 1 comparison
 	return value1 < value2;
 }
 
+function valEqualsIndex(arr, value, index, mods) {
+	mods.push(["compare", index, index]);
+	return value == getIndex(arr, index, mods);
+}
+
 function setIndex(arr, index, value, mods) { // 1 write
 	mods.push(["write", index, value]);
 	arr[index] = value;

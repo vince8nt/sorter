@@ -6,17 +6,18 @@ var ctx = c.getContext("2d");
 // classes -----------------------------------------------------------------------
 
 class Button {
-	constructor(x2, y2, w, h, text, col, border) {
-		this.x = x2;
-		this.y = y2;
-		this.width = w;
-		this.height = h;
-		this.label = text;
-		this.color = col;
-		this.highlight = border;
+	constructor(x, y, width, height, label, color, border) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.label = label;
+		this.color = color;
+		this.border = border;
+		this.draw();
 	}
 	draw() {
-		ctx.fillStyle = this.highlight;
+		ctx.fillStyle = this.border;
 		ctx.fillRect(this.x, this.y, this.width, this.height);
 		ctx.fillStyle = this.color;
 		ctx.fillRect(this.x + 5, this.y + 5, this.width - 10, this.height - 10);
@@ -24,13 +25,16 @@ class Button {
 		ctx.fillText(this.label, this.x + 10, this.y + this.height / 2 + 5);
 	}
 	setBorder(border) {
-		this.highlight = border;
+		this.border = border;
+		this.draw();
 	}
-	setColor(c) {
-		this.color = c;
+	setColor(color) {
+		this.color = color;
+		this.draw();
 	}
-	setLabel(text) {
-		this.label = text;
+	setLabel(label) {
+		this.label = label;
+		this.draw();
 	}
 	getLabel() {
 		return this.label;
@@ -55,18 +59,29 @@ class Selector {
 		this.bold = -1;
 	}
 	addButton (x, y, width, height, text) {
-		if (this.buttons.length === 0) {
+		if (this.buttons.length == 0) {
 			this.buttons.push(new Button(x, y, width, height, text, this.color, this.sColor));
 			this.bold = 0;
 		}
 		else {
 			this.buttons.push(new Button(x, y, width, height, text, this.color, this.bColor));
 		}
-		this.buttons[this.buttons.length - 1].draw();
 	}
-	
+	setBorder(border) {
+		this.bColor = border;
+		for (var i = 0; i < this.buttons.length; i++) {
+			if (i != this.bold)
+				this.buttons[i].setBorder(this.bColor);
+		}
+	}
+	setColor(color) {
+		this.color = color;
+		for (var i = 0; i < this.buttons.length; i++) {
+			this.buttons[i].setColor(this.color);
+		}
+	}
 	getSelected () {
-		if (this.bold === -1)
+		if (this.bold == -1)
 			return "";
 		return this.buttons[this.bold].getLabel();
 	}
@@ -74,10 +89,8 @@ class Selector {
 		for (var i = 0; i < this.buttons.length; i++) {
 			if (this.buttons[i].clicked(pointerX, pointerY)) {
 				this.buttons[this.bold].setBorder(this.bColor);
-				this.buttons[this.bold].draw();
 				this.bold = i;
 				this.buttons[i].setBorder(this.sColor);
-				this.buttons[i].draw();
 				return true;
 			}
 		}
@@ -87,96 +100,93 @@ class Selector {
 
 class Graph {
 	constructor(left, top, width, height) {
-		this.items = [1, 2, 3, 4, 5, 6, 7, 8];
 		this.left = left;
 		this.top = top;
 		this.width = width;
 		this.height = height;
-		this.color = "#10FF10";
-		this.border = "#000000";
+		this.color = "#FFFFFF";
+		this.compColor = "#00FF00";
+		this.writeColor = "#FF0000";
+		this.duplicates = false;
+		this.setLength(100);
+		this.lastHighlight = [];
 	}
-	draw(bold) { // bold is an array of each bolded index (in order from least to greatest)
-		ctx.clearRect(this.left, this.top, this.width, this.height);
-		var length = this.items.length;
-		var boldIndex = 0;
-		for (var i = 0; i < length; i++) {
-			var x = this.left + i * this.width / length;
-			var tall = this.items[i] / length * this.height;
-			var y = this.top + this.height - tall;
-			ctx.fillStyle = this.border;
-			ctx.fillRect(x, y, this.width / length, tall);
-			if (i === bold[boldIndex]) {
-				ctx.fillStyle = "#FF0000";
-				if (boldIndex < bold.length - 1)
-					boldIndex++;
+	draw() { // bold is an array of each bolded index (in order from least to greatest)
+		for (var i = 0; i < this.items.length; i++) {
+			this.drawIndex(i, this.color);
+		}
+	}
+	replace(index, value) {
+		this.drawUnHighlight();
+		this.lastHighlight = [index];
+		this.items[index] = value;
+		this.drawIndex(index, this.writeColor);
+
+	}
+	highlight(highlight) {
+		this.drawUnHighlight();
+		this.lastHighlight = highlight;
+		for (var i = 0; i < highlight.length; i++) {
+			this.drawIndex(highlight[i], this.compColor);
+		}
+	}
+	drawUnHighlight() {
+		for (var i = 0; i < this.lastHighlight.length; i++) {
+			this.drawIndex(this.lastHighlight[i], this.color);
+		}
+	}
+	drawIndex(index, color) {
+		var barWidth = this.width / this.items.length;
+		var x = Math.round(this.left + index * barWidth);
+		var x2 = this.left + (index + 1) * barWidth;
+		barWidth = Math.round(x2 - x);
+		var tall = Math.round(this.items[index] / this.items.length * this.height);
+		ctx.clearRect(x, this.top, barWidth, this.height);
+		ctx.fillStyle = color;
+		ctx.fillRect(x, this.top + this.height - tall, barWidth, tall);
+	}
+	getLength() {
+		return this.items.length;
+	}
+	setLength(newLength) {
+		if (newLength > 1) {
+			this.items = [];
+			for (var i = 0; i < newLength; i++) {
+				if (this.duplicates && Math.random() < 0.5 && i > 0)
+					this.items.push(i);
+				else
+					this.items.push(i + 1);
 			}
-			else {
-				ctx.fillStyle = this.color;
-			}
-			ctx.fillRect(x + 2, y + 2, this.width / length - 4, tall - 4);
+			this.draw();
 		}
-	}
-	canAdd() {
-		if (this.items.length < 100)
-			return true;
-		return false;
-	}
-	canSubtract() {
-		if (this.items.length > 2)
-			return true;
-		return false;
-	}
-	addCol() {
-		if (! this.canAdd())
-			return false;
-		var newLength = this.items.length + 1;
-		this.items = [];
-		for (var i = 0; i < newLength; i++) {
-			this.items.push(i + 1);
-		}
-		return true;
-	}
-	removeCol() {
-		if (! this.canSubtract())
-			return false;
-		var newLength = this.items.length - 1;
-		this.items = [];
-		for (var i = 0; i < newLength; i++) {
-			this.items.push(i + 1);
-		}
-		return true;
 	}
 	shuffle() {
-		var tempItems = [];
-		while (this.items.length > 0) {
-			var index = Math.floor(Math.random() * this.items.length);
-			tempItems.push(this.items.splice(index, 1));
+		for (var i = this.items.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * i);
+			const temp = this.items[i];
+			this.items[i] = this.items[j];
+  			this.items[j] = temp;
 		}
-		this.items = tempItems;
+		this.draw();
 	}
-	sort() {
-		var length = this.items.length;
-		this.items = [];
-		for (var i = 0; i < length; i++) {
-			this.items.push(i + 1);
-		}
+	setDuplicates(hasDups) {
+		this.duplicates = hasDups;
+		this.setLength(this.items.length);
 	}
-	makeDups() {
-		for (var i = 1; i < this.items.length; i++) {
-			if (Math.random() < 0.5) {
-				this.items[i]--;
-			}
-		}
+	getDuplicates() {
+		return this.duplicates;
 	}
 	getItems() {
-		return this.items;
+		return [...this.items];
 	}
 }
 
 // make visuals -------------------------------------------------------------------
 
-myGraph = new Graph(10, 10, 980, 440);
-myGraph.draw([]);
+myGraph = new Graph(0, 0, 1000, 400);
+
+ctx.fillStyle = "#FFFFFF";
+ctx.fillRect(0, 470, 1000, 130);
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
@@ -191,84 +201,95 @@ sortType.addButton(450, 480, 100, 50, "Heap Sort");
 sortType.addButton(450, 540, 100, 50, "In-Place Merge");
 
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
-shuffleButton.draw();
-
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
-dupButton.draw();
-
 addButton = new Button(780, 540, 50, 50, "+", "#20C010", "#000000");
-sizeDisp = new Button(730, 540, 50, 50, 8, "#A0A0A0", "#A0A0A0");
+sizeDisp = new Button(730, 540, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
 subButton = new Button(680, 540, 50, 50, "-", "#C01010", "#000000");
-addButton.draw();
-sizeDisp.draw();
-subButton.draw();
-
 goButton = new Button(840, 480, 150, 110, "Go", "#20C010", "#000000");
-goButton.draw();
 
 var sorting = false;
-var duplicates = false;
 
 // program starts here ------------------------------------------------------------
 
 function doAdd() {
-	if (! myGraph.canSubtract()) { // visually enable sub button
-		subButton.setBorder("#000000");
+	var length = myGraph.getLength();
+	if (length < 1000) {
+		subButton.setBorder("#000000");     // visually enable sub button
 		subButton.setColor("#C01010");
-		subButton.draw();
-	}
-	if (myGraph.addCol()) {
-		sizeDisp.setLabel(sizeDisp.getLabel() + 1);
-		sizeDisp.draw();
-		if (duplicates)
-			myGraph.makeDups();
-		myGraph.draw([]);
-		if (! myGraph.canAdd()) { // visually disable add button
-			addButton.setBorder("#707070");
+		myGraph.setLength(++length);        // set graph length
+		sizeDisp.setLabel(length);          // set length label
+		if (length == 1000) {
+			addButton.setBorder("#707070"); // visually disable add button
 			addButton.setColor("#909090");
-			addButton.draw();
 		}
 	}
 }
 
 function doSub() {
-	if (! myGraph.canAdd()) { // visually enable add button
-		addButton.setBorder("#000000");
+	var length = myGraph.getLength();
+	if (length > 2) {
+		addButton.setBorder("#000000");     // visually enable add button
 		addButton.setColor("#20C010");
-		addButton.draw();
-	}
-	if (myGraph.removeCol()) {
-		sizeDisp.setLabel(sizeDisp.getLabel() - 1);
-		sizeDisp.draw();
-		if (duplicates)
-			myGraph.makeDups();
-		myGraph.draw([]);
-		if (! myGraph.canSubtract()) { // visually disable sub button
-			subButton.setBorder("#707070");
+		myGraph.setLength(--length);        // set graph length
+		sizeDisp.setLabel(length);          // set length label
+		if (length == 2) {
+			subButton.setBorder("#707070"); // visually disable sub button
 			subButton.setColor("#909090");
-			subButton.draw();
 		}
 	}
 }
 
-function clickDups() {
-	if (duplicates) {
-		duplicates = false;
-		dupButton.setColor("#C01010");
-		dupButton.setLabel("duplicates: off");
-		myGraph.sort();
-		dupButton.draw();
-		myGraph.draw([]);
+function clickDuplicates() {
+	myGraph.setDuplicates(!myGraph.getDuplicates());
+	if (myGraph.getDuplicates()) {
+		dupButton.setColor("#20C010");
+		dupButton.setLabel("duplicates: on");
     }
     else {
-    	duplicates = true;
-    	dupButton.setColor("#20C010");
-		dupButton.setLabel("duplicates: on");
-		myGraph.sort();
-		myGraph.makeDups();
-		dupButton.draw();
-		myGraph.draw([]);
+		dupButton.setColor("#C01010");
+		dupButton.setLabel("duplicates: off");
     }
+}
+
+function disableButtons() {
+	sorting = true;
+
+	sortType.setBorder("#707070");
+	sortType.setColor("#909090");
+	shuffleButton.setBorder("#707070");
+	shuffleButton.setColor("#909090");
+	dupButton.setBorder("#707070");
+	dupButton.setColor("#909090");
+	addButton.setBorder("#707070");
+	addButton.setColor("#909090");
+	subButton.setBorder("#707070");
+	subButton.setColor("#909090");
+	goButton.setBorder("#707070");
+	goButton.setColor("#909090");
+}
+
+function enableButtons() {
+	sorting = false;
+
+	sortType.setBorder("#707070");
+	sortType.setColor("#9090FF");
+	shuffleButton.setBorder("#000000");
+	shuffleButton.setColor("#20C010");
+	dupButton.setBorder("#000000");
+	if (myGraph.getDuplicates())
+		dupButton.setColor("#20C010");
+	else
+		dupButton.setColor("#C01010");
+	if (myGraph.getLength() < 1000) {
+		addButton.setBorder("#000000");
+		addButton.setColor("#20C010");
+	}
+	if (myGraph.getLength() > 2) {
+		subButton.setBorder("#000000");
+		subButton.setColor("#C01010");
+	}
+	goButton.setBorder("#000000");
+	goButton.setColor("#20C010");
 }
 
 c.addEventListener('click', function(event) {
@@ -277,149 +298,98 @@ c.addEventListener('click', function(event) {
     var screenX = event.pageX - c.offsetLeft - c.clientLeft;
     var screenY = event.pageY - c.offsetTop - c.clientTop;
     
-    if (sortType.clicked(screenX, screenY)) { // selector buttons
-    	// nothing to be done
-    }
-    else if (goButton.clicked(screenX, screenY)) { // go button
-    	
-    	// alert("Go pressed. Using " + sortType.getSelected() + " sort.");
-    	sorting = true;
-    	goButton.setBorder("#707070");
-		goButton.setColor("#909090");
-		goButton.draw();
-		if (sortType.getSelected() === "Bubble Sort")
-    		doSwaps(bubbleSort());
-    	else if (sortType.getSelected() === "Cocktail Shaker")
-    		doSwaps(cocktailShaker());
-    	else if (sortType.getSelected() === "Insertion Sort")
-    		doSwaps(insertionSort());
-    	else if (sortType.getSelected() === "Merge Sort")
-    		doMods(mergeSort(false));
-    	else if (sortType.getSelected() === "In-Place Merge")
-    		doSwaps(mergeSort(true));
-    	else if (sortType.getSelected() === "Quicksort")
-    		doSwaps(quicksort());
-    	else if (sortType.getSelected() === "Counting Sort")
-    		doMods(countingSort());
-    	else if (sortType.getSelected() === "Binary Radix MSB")
-    		doSwaps(binaryRadixMSB());
-    	else if (sortType.getSelected() === "Selection Sort")
-    		doSwaps(selectionSort());
-    	else if (sortType.getSelected() === "Heap Sort")
-    		doSwaps(heapSort());
-    	else {
-    		goButton.setBorder("#000000");
-			goButton.setColor("#20C010");
-			goButton.draw();
-			alert("Invalid sorting algorithm.");
-			sorting = false;
-    	}
+    if (sortType.clicked(screenX, screenY)) {           // selector buttons
+    	console.log("selector button clicked");
     }
     else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
+    	console.log("shuffle button clicked");
     	myGraph.shuffle();
-    	myGraph.draw([]);
     }
-    else if (addButton.clicked(screenX, screenY)) { // add button
+    else if (addButton.clicked(screenX, screenY)) {     // add button
+    	console.log("add button clicked");
     	doAdd();
     }
-    else if (subButton.clicked(screenX, screenY)) { // subtract button
+    else if (subButton.clicked(screenX, screenY)) {     // subtract button
+    	console.log("subtract button clicked");
     	doSub();
     }
-    else if (dupButton.clicked(screenX, screenY)) { // duplicates button
-    	clickDups();
+    else if (dupButton.clicked(screenX, screenY)) {     // duplicates button
+    	console.log("duplicates button clicked");
+    	clickDuplicates();
     }
-
+    else if (goButton.clicked(screenX, screenY)) {      // go button
+    	console.log("Go button clicked. Using " + sortType.getSelected() + " sort.");
+    	disableButtons();
+		if (sortType.getSelected() === "Bubble Sort") {
+    		doMods(bubbleSort(myGraph.getItems()));
+		}
+    	else if (sortType.getSelected() === "Cocktail Shaker") {
+    		doSwaps(cocktailShaker());
+    	}
+    	else if (sortType.getSelected() === "Insertion Sort") {
+    		doSwaps(insertionSort());
+    	}
+    	else if (sortType.getSelected() === "Merge Sort") {
+    		doMods(mergeSort(false));
+    	}
+    	else if (sortType.getSelected() === "In-Place Merge") {
+    		doSwaps(mergeSort(true));
+    	}
+    	else if (sortType.getSelected() === "Quicksort") {
+    		doSwaps(quicksort());
+    	}
+    	else if (sortType.getSelected() === "Counting Sort") {
+    		doMods(countingSort());
+    	}
+    	else if (sortType.getSelected() === "Binary Radix MSB") {
+    		doSwaps(binaryRadixMSB());
+    	}
+    	else if (sortType.getSelected() === "Selection Sort") {
+    		doSwaps(selectionSort());
+    	}
+    	else if (sortType.getSelected() === "Heap Sort") {
+    		doSwaps(heapSort());
+    	}
+    	else {
+    		enableButtons();
+    		console.log("Failed to find " + sortType.getSelected() + " sort.");
+			alert("Invalid sorting algorithm.");
+    	}
+    }
 }, false);
 
-function doSwaps(swaps) {
-	var g = myGraph.getItems();
-	var delay = 1500 / g.length;
-	setTimeout(swap, 100, swaps, 0, delay, 0);
-}
-
-function swap(swaps, i, delay, swapsNum) {
-	if (i < swaps.length) {
-		var bold = swaps[i][0],
-			first = swaps[i][1][0],
-			second = swaps[i][1][1];
-		if (first !== -1 && second !== -1) {
-			var g = myGraph.getItems();
-			var temp = g[first];
-			g[first] = g[second];
-			g[second] = temp;
-			swapsNum++;
-		}
-		myGraph.draw(bold);
-		setTimeout(swap, delay, swaps, i + 1, delay, swapsNum);
-	}
-	else {
-		setTimeout(endSwaps, delay, swaps.length, swapsNum);
-	}
-}
-
-function endSwaps(c, s) {
-	goButton.setBorder("#000000");
-	goButton.setColor("#20C010");
-	goButton.draw();
-	myGraph.draw([]);
-	alert("Array sorted: " + c + " comparisons, " + s + " swaps.");
-	sorting = false;
-}
-
 function doMods(mods) {
-	var g = myGraph.getItems();
-	var delay = 1500 / g.length;
-	setTimeout(modify, 100, mods, 0, delay, 0);
+	console.log("Sort is " + mods.length + " long.");
+	var delay = 1500 / myGraph.getLength();
+	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0);
 }
 
-function modify(mods, i, delay, modsNum) {
+function modify(mods, i, delay, reads, writes, comps) {
 	if (i < mods.length) {
-		var bold = mods[i][0],
-			index = mods[i][1],
-			value = mods[i][2];
-		if (index !== -1) {
-			myGraph.getItems()[index] = value;
-			modsNum++;
+		if (mods[i][0] === "read") {
+			modify(mods, i + 1, delay, reads + 1, writes, comps);
 		}
-		myGraph.draw(bold);
-		setTimeout(modify, delay, mods, i + 1, delay, modsNum);
+		else {
+			if (mods[i][0] === "compare") {
+				comps++;
+				myGraph.highlight([mods[i][1], mods[i][2]]);
+			}
+			else if (mods[i][0] === "write") {
+				writes++;
+				myGraph.replace(mods[i][1], mods[i][2]);
+			}
+			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps);
+		}
 	}
 	else {
-		setTimeout(endMods, delay, modsNum);
+		setTimeout(endMods, 100, reads, writes, comps);
 	}
 }
 
-function endMods(modsNum) {
-	goButton.setBorder("#000000");
-	goButton.setColor("#20C010");
-	goButton.draw();
-	myGraph.draw([]);
-	alert("Array sorted: " + modsNum + " modifications.");
-	sorting = false;
-}
-
-
-function bubbleSort() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
-
-	for (var max = graphCopy.length - 1; max > -1; max--) {
-		var noSwaps = true;
-		for (var i = 0; i < max; i++) {
-			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) { // idk why parseInt is required
-				swaps.push([[i, i + 1], [i, i + 1]]);
-				var temp = graphCopy[i];
-				graphCopy[i] = graphCopy[i + 1];
-				graphCopy[i + 1] = temp;
-				noSwaps = false;
-			}
-			else {
-				swaps.push([[i, i + 1], [-1, -1]]);
-			}
-		}
-		if (noSwaps) return swaps; // terminate sorting because it is already finished
-	}
-	return swaps;
+function endMods(reads, writes, comps) {
+	enableButtons();
+	myGraph.draw();
+	alert("Array sorted\ncomparisons: " + comps + "\nreads: " + reads + "\nwrites: " + writes);
 }
 
 function cocktailShaker() { // bidirectional bubble sort

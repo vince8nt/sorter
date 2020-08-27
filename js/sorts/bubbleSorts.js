@@ -92,14 +92,11 @@ function optimizedCocktailShaker() { // bidirectional bubble sort
 function gnomeSort(arr) {
 	var mods = [];
 
-	var index = 0;
-	while (index < arr.length) {
-		if (index > 0 && lessThan(arr, index, index - 1, mods)) {
-			swap(arr, index, index - 1, mods);
-			index--;
-		}
+	for (var i = 0; i < arr.length;) {
+		if (i > 0 && lessThan(arr, i, i - 1, mods))
+			swap(arr, i, --i, mods);
 		else
-			index++
+			i++;
 	}
 
 	return mods;

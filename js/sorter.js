@@ -108,7 +108,7 @@ class Graph {
 		this.compColor = "#00FF00";
 		this.writeColor = "#FF0000";
 		this.duplicates = false;
-		this.setLength(100);
+		this.setLength(30);
 		this.lastHighlight = [];
 	}
 	draw() { // bold is an array of each bolded index (in order from least to greatest)
@@ -190,7 +190,7 @@ ctx.fillRect(0, 470, 1000, 130);
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
-sortType.addButton(10, 540, 100, 50, "Insertion Sort");
+sortType.addButton(10, 540, 100, 50, "Gnome Sort");
 sortType.addButton(120, 480, 100, 50, "Selection Sort");
 sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
 sortType.addButton(230, 480, 100, 50, "Quicksort");
@@ -326,28 +326,28 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Cocktail Shaker") {
     		doMods(cocktailShaker(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "Insertion Sort") {
-    		doSwaps(insertionSort());
+    	else if (sortType.getSelected() === "Gnome Sort") {
+    		doMods(gnomeSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "Merge Sort") {
+    	else if (sortType.getSelected() === "-Merge Sort") {
     		doMods(mergeSort(false));
     	}
-    	else if (sortType.getSelected() === "In-Place Merge") {
+    	else if (sortType.getSelected() === "-In-Place Merge") {
     		doSwaps(mergeSort(true));
     	}
-    	else if (sortType.getSelected() === "Quicksort") {
+    	else if (sortType.getSelected() === "-Quicksort") {
     		doSwaps(quicksort());
     	}
-    	else if (sortType.getSelected() === "Counting Sort") {
+    	else if (sortType.getSelected() === "-Counting Sort") {
     		doMods(countingSort());
     	}
-    	else if (sortType.getSelected() === "Binary Radix MSB") {
+    	else if (sortType.getSelected() === "-Binary Radix MSB") {
     		doSwaps(binaryRadixMSB());
     	}
-    	else if (sortType.getSelected() === "Selection Sort") {
+    	else if (sortType.getSelected() === "-Selection Sort") {
     		doSwaps(selectionSort());
     	}
-    	else if (sortType.getSelected() === "Heap Sort") {
+    	else if (sortType.getSelected() === "-Heap Sort") {
     		doSwaps(heapSort());
     	}
     	else {
@@ -393,25 +393,6 @@ function endMods(reads, writes, comps) {
 }
 
 
-
-function insertionSort() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
-
-	for (var start = 1; start < graphCopy.length; start++) { // array length is >= 2
-		for (var i = start; i > 0; i--) {
-			if (parseInt(graphCopy[i]) >= parseInt(graphCopy[i - 1])) {
-				swaps.push([[i - 1, i], [-1, -1]]);
-				break;
-			}
-			swaps.push([[i - 1, i], [i - 1, i]]);
-			var temp = graphCopy[i];
-			graphCopy[i] = graphCopy[i - 1];
-			graphCopy[i - 1] = temp;
-		}
-	}
-	return swaps;
-}
 
 function mergeSort(inPlace) {
 	var mods = []; // [[[highlights], index, value], etc]

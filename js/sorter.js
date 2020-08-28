@@ -211,6 +211,7 @@ sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
 
 sortType.addButton(450, 480, 100, 50, "Merge Sort");
 sortType.addButton(450, 540, 100, 50, "Counting Sort");
+sortType.addButton(450, 600, 100, 50, "Binary Radix MSD");
 
 shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
@@ -388,6 +389,11 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Counting Sort") {
     		doMods(countingSort(myGraph.getItems()));
     	}
+    	else if (sortType.getSelected() === "Binary Radix MSD") {
+    		doMods(binaryRadixMSD(myGraph.getItems()));
+    	}
+    	
+
     	
     	else {
     		enableButtons();
@@ -444,49 +450,7 @@ function endMods(reads, writes, comps) {
 
 
 
-function binaryRadixMSB() {
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
 
-	// graphCopy.length == graphCopy.maxValue
-	var sigBit = Math.floor(Math.log(graphCopy.length) / Math.log(2));
-	var bitNum = Math.round(Math.pow(2, sigBit));
-	binaryRadixMSBR(graphCopy, bitNum, 0, graphCopy.length - 1, swaps);
-	return swaps;
-}
-
-function binaryRadixMSBR(list, bitNum, start, end, swaps) {
-	if (bitNum >= 1 && end - start > 0) {
-		var endIndex = end;
-		while (endIndex > start) {
-			swaps.push([[endIndex], [-1, -1]]);
-			if ((list[endIndex] % 256) & (bitNum % 256))
-				endIndex--;
-			else
-				break;
-		}
-		for (var i = start; i < endIndex; i++) {
-			if ((list[i] % 256) & (bitNum % 256)) {
-				swaps.push([[i, endIndex], [i, endIndex]]);
-				var temp = list[i];
-				list[i] = list[endIndex];
-				list[endIndex] = temp;
-				endIndex--;
-				while (endIndex > i) {
-					swaps.push([[endIndex], [-1, -1]]);
-					if ((list[endIndex] % 256) & (bitNum % 256))
-						endIndex--;
-					else
-						break;
-				}
-			}
-			else
-				swaps.push([[i, endIndex], [-1, -1]]);
-		}
-		binaryRadixMSBR(list, bitNum / 2, start, endIndex, swaps);
-		binaryRadixMSBR(list, bitNum / 2, endIndex + 1, end, swaps);
-	}
-}
 
 
 

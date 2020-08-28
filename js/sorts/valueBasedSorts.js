@@ -22,3 +22,46 @@ function countingSort(arr) {
 
 	return mods;
 }
+
+function binaryRadixMSD(arr) {
+	var mods = [];
+
+	var maxValue = 0; // find the largest value in arr
+	for (var i = 0; i < arr.length; i++) {
+		if (valLessThan(arr, maxValue, i, mods))
+			maxValue = getIndex(arr, i, mods);
+	}
+	// find the number represented by the most significant bit of the largest value
+	var sigBit = Math.floor(Math.log(maxValue) / Math.log(2));
+	var bitNum = Math.round(Math.pow(2, sigBit));
+
+	binaryRadixMSDR(arr, bitNum, 0, arr.length - 1, mods);
+
+	return mods;
+}
+
+function binaryRadixMSDR(arr, bitNum, start, end, mods) {
+	if (bitNum >= 1 && start < end) {
+		var j = end;
+		while (j > start && (getIndex(arr, j, mods) ) & (bitNum )) {
+			j--;
+		}
+		for (var i = start; i < j; i++) {
+			if ((getIndex(arr, i, mods) ) & (bitNum )) {
+				swap(arr, i, j, mods);
+				j--;
+				while (j > i && (getIndex(arr, j, mods) ) & (bitNum )) {
+					j--;
+				}
+			}
+		}
+		binaryRadixMSDR(arr, bitNum / 2, start, j, mods);
+		binaryRadixMSDR(arr, bitNum / 2, j + 1, end, mods);
+	}
+}
+
+
+
+
+
+

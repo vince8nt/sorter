@@ -214,14 +214,18 @@ sortType.addButton(450, 540, 100, 50, "Counting Sort");
 sortType.addButton(450, 600, 100, 50, "Binary Radix MSD");
 sortType.addButton(450, 660, 100, 50, "Binary Radix LSD");
 
-sortType.addButton(560, 480, 100, 50, "Reverse Array");
+sortType.addButton(584, 600, 100, 50, "Reverse Array");
+sortType.addButton(584, 660, 100, 50, "Split Array");
 
-shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
-dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
-addButton = new Button(780, 540, 50, 50, "+", "#20C010", "#000000");
-sizeDisp = new Button(730, 540, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
-subButton = new Button(680, 540, 50, 50, "-", "#C01010", "#000000");
-goButton = new Button(840, 480, 150, 110, "Go", "#20C010", "#000000");
+sortType.addButton(694, 600, 100, 50, "Bell Curve Array");
+sortType.addButton(694, 660, 100, 50, "Half Reverse");
+
+shuffleButton = new Button(584, 480, 110, 110, "Shuffle", "#20C010", "#000000");
+dupButton = new Button(729, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
+addButton = new Button(804, 540, 50, 50, "+", "#20C010", "#000000");
+sizeDisp = new Button(754, 540, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
+subButton = new Button(704, 540, 50, 50, "-", "#C01010", "#000000");
+goButton = new Button(864, 480, 150, 110, "Go", "#20C010", "#000000");
 
 var sorting = false;
 
@@ -402,6 +406,15 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Reverse Array") {
     		doMods(reverseArray(myGraph.getItems()));
     	}
+    	else if (sortType.getSelected() === "Split Array") {
+    		doMods(splitArray(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Bell Curve Array") {
+    		doMods(bellCurveArray(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Half Reverse") {
+    		doMods(halfReverseArray(myGraph.getItems()));
+    	}
     	
 
     	
@@ -423,7 +436,7 @@ function modify(mods, i, delay, reads, writes, comps) {
 	if (i < mods.length) {
 		const modType = mods[i][0];
 		if (modType === "read" || modType === "aux read") {
-			modify(mods, i + 1, delay, reads + 1, writes, comps);
+			modify(mods, i + 1, delay, reads + 1, writes, comps); // fix this so it doesn't overdo the stack
 		}
 		else {
 			if (modType === "compare") {

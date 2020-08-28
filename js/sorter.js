@@ -108,7 +108,7 @@ class Graph {
 		this.compColor = "#00FF00";
 		this.writeColor = "#FF0000";
 		this.duplicates = false;
-		this.setLength(30);
+		this.setLength(32);
 		this.lastHighlight = [];
 	}
 	draw() {
@@ -209,7 +209,7 @@ sortType.addButton(340, 540, 100, 50, "Quick Converge");
 sortType.addButton(340, 600, 100, 50, "Min Heap Sort");
 sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
 
-// sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
+sortType.addButton(450, 480, 100, 50, "Merge Sort");
 // sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
 
 shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
@@ -225,12 +225,13 @@ var sorting = false;
 
 function doAdd() {
 	var length = myGraph.getLength();
-	if (length < 1000) {
+	if (length <= 512) {
+		length *= 2;
 		subButton.setBorder("#000000");     // visually enable sub button
 		subButton.setColor("#C01010");
-		myGraph.setLength(++length);        // set graph length
+		myGraph.setLength(length);        // set graph length
 		sizeDisp.setLabel(length);          // set length label
-		if (length == 1000) {
+		if (length > 512) {
 			addButton.setBorder("#707070"); // visually disable add button
 			addButton.setColor("#909090");
 		}
@@ -239,12 +240,13 @@ function doAdd() {
 
 function doSub() {
 	var length = myGraph.getLength();
-	if (length > 2) {
+	if (length >= 4) {
+		length = Math.floor(length / 2);
 		addButton.setBorder("#000000");     // visually enable add button
 		addButton.setColor("#20C010");
-		myGraph.setLength(--length);        // set graph length
+		myGraph.setLength(length);        // set graph length
 		sizeDisp.setLabel(length);          // set length label
-		if (length == 2) {
+		if (length < 4) {
 			subButton.setBorder("#707070"); // visually disable sub button
 			subButton.setColor("#909090");
 		}
@@ -368,22 +370,22 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Quick Converge") {
     		doMods(quicksortConv(myGraph.getItems()));
     	}
-    	
+    	else if (sortType.getSelected() === "Max Heap Sort") {
+    		doMods(maxHeapSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Min Heap Sort") {
+    		doMods(minHeapSort(myGraph.getItems()));
+    	}
     	else if (sortType.getSelected() === "Reverse Min Heap") {
     		doMods(backMinHeapSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Median Heap Sort") {
     		doMods(medianHeapSort(myGraph.getItems()));
     	}
-    	
-    	
-    	else if (sortType.getSelected() === "Min Heap Sort") {
-    		doMods(minHeapSort(myGraph.getItems()));
+    	else if (sortType.getSelected() === "Merge Sort") {
+    		doMods(mergeSort(myGraph.getItems()));
     	}
     	
-    	else if (sortType.getSelected() === "Max Heap Sort") {
-    		doMods(maxHeapSort(myGraph.getItems()));
-    	}
     	else {
     		enableButtons();
     		console.log("Failed to find " + sortType.getSelected() + " sort.");
@@ -415,6 +417,7 @@ function modify(mods, i, delay, reads, writes, comps) {
 			}
 			else if (modType === "aux write") {
 				writes++;
+				myGraph.drawUnHighlight();
 			}
 			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps);
 		}
@@ -432,83 +435,7 @@ function endMods(reads, writes, comps) {
 
 
 
-function mergeSort(inPlace) {
-	var mods = []; // [[[highlights], index, value], etc]
-	var graphCopy = [...myGraph.getItems()];
-	splitMerge(graphCopy, 0, graphCopy.length - 1, mods, inPlace);
-	return mods;
-}
 
-function splitMerge(list, begin, end, mods, inPlace) {
-	if (begin < end) {
-		var middle = Math.floor((begin + end) / 2);
-		splitMerge(list, begin, middle, mods, inPlace);
-		splitMerge(list, middle + 1, end, mods, inPlace);
-		if (inPlace)
-			inPlaceMerge(list, begin, middle, end, mods);
-		else
-			merge(list, begin, middle, end, mods);
-	}
-}
-
-function inPlaceMerge(list, begin, middle, end, mods) {
-	for (middle++; begin < middle; begin++) {
-		if (parseInt(list[begin]) > parseInt(list[middle])) {
-			mods.push([[begin, middle], [begin, middle]]);
-			var temp = list[begin];
-			list[begin] = list[middle];
-			list[middle] = temp;
-			for (var i = middle; i < end; i++) {
-				if (parseInt(list[i]) > parseInt(list[i + 1])) {
-					mods.push([[i, i + 1], [i, i + 1]]);
-					var temp = list[i];
-					list[i] = list[i + 1];
-					list[i + 1] = temp;
-				}
-				else {
-					mods.push([[i, i + 1], [-1, -1]]);
-					break;
-				}
-			}
-		}
-		else
-			mods.push([[begin, middle], [-1, -1]]);
-	}
-}
-
-function merge(list, begin, middle, end, mods) {
-	var bold = [];
-	for (var i = begin; i <= end; i++) {
-		bold.push(i);
-	}
-	mods.push([bold, -1, -1]); // highlight the two parts that will be merged
-
-	var c1 = begin;
-	var c2 = middle + 1;
-	var tempList = [];
-	while (c1 <= middle && c2 <= end) {
-		if (parseInt(list[c1]) < parseInt(list[c2])) {
-			tempList.push(parseInt(list[c1]));
-			c1++;
-		}
-		else {
-			tempList.push(parseInt(list[c2]));
-			c2++;
-		}
-	}
-	while (c1 <= middle) {
-		tempList.push(parseInt(list[c1]));
-		 c1++;
-	}
-	while (c2 <= end) {
-		tempList.push(parseInt(list[c2]));
-		c2++;
-	}
-	for (var i = 0; i < tempList.length; i++) {
-		list[begin + i] = tempList[i];
-		mods.push([[begin + i], begin + i, tempList[i]]);
-	}
-}
 
 
 

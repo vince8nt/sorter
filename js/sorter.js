@@ -210,7 +210,7 @@ sortType.addButton(340, 600, 100, 50, "Min Heap Sort");
 sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
 
 sortType.addButton(450, 480, 100, 50, "Merge Sort");
-// sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
+sortType.addButton(450, 540, 100, 50, "Counting Sort");
 
 shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
@@ -385,6 +385,9 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Merge Sort") {
     		doMods(mergeSort(myGraph.getItems()));
     	}
+    	else if (sortType.getSelected() === "Counting Sort") {
+    		doMods(countingSort(myGraph.getItems()));
+    	}
     	
     	else {
     		enableButtons();
@@ -396,7 +399,7 @@ c.addEventListener('click', function(event) {
 
 function doMods(mods) {
 	console.log("Sort is " + mods.length + " long.");
-	var delay = 1500 / myGraph.getLength();
+	var delay = 1000 / myGraph.getLength();
 	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0);
 }
 
@@ -439,31 +442,7 @@ function endMods(reads, writes, comps) {
 
 
 
-function countingSort() {
-	var mods = []; // [[[highlights], index, value], etc]
-	var graphCopy = [...myGraph.getItems()];
-	var count = [];
-	for (var i = 0; i < graphCopy.length; i++) {
-		count.push(0);
-	}
-	for (var i = 0; i < graphCopy.length; i++) {
-		count[graphCopy[i] - 1]++;
-		mods.push([[i], -1, -1]);
-	}
-	for (var i = 1; i < count.length; i++) {
-		count[i] = count[i] + count[i - 1];
-		mods.push([[i - 1, i], -1, -1]);
-	}
-	var index = 0;
-	for (var i = 0; i < count.length; i++) {
-		while (index < count[i]) {
-			graphCopy[index] = i + 1;
-			mods.push([[index], index, i + 1]);
-			index++;
-		}
-	}
-	return mods;
-}
+
 
 function binaryRadixMSB() {
 	var swaps = []; // [[[highlights], [swaps]], etc]

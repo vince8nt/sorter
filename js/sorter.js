@@ -140,7 +140,7 @@ class Graph {
 		var x = Math.round(this.left + index * barWidth);
 		var x2 = this.left + (index + 1) * barWidth;
 		barWidth = Math.round(x2 - x);
-		var tall = Math.round(this.items[index] / this.items.length * this.height);
+		var tall = Math.round((this.items[index] + 1) / this.items.length * this.height);
 		ctx.clearRect(x, this.top, barWidth, this.height);
 		ctx.fillStyle = color;
 		ctx.fillRect(x, this.top + this.height - tall, barWidth, tall);
@@ -153,9 +153,9 @@ class Graph {
 			this.items = [];
 			for (var i = 0; i < newLength; i++) {
 				if (this.duplicates && Math.random() < 0.5 && i > 0)
-					this.items.push(i);
+					this.items.push(i - 1);
 				else
-					this.items.push(i + 1);
+					this.items.push(i);
 			}
 			this.draw();
 		}

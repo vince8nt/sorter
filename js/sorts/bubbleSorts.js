@@ -96,6 +96,34 @@ function optimizedGnomeSort(arr) {
 	return mods;
 }
 
+function binaryOptimizedGnomeSort(arr) {
+	var mods = [];
+
+	for (var i = 1; i < arr.length; i++) {
+		var min = 0;
+		var max = i;
+		var insertIndex = Math.floor((min + max) / 2);
+		const insertValue = getIndex(arr, i, mods);
+		while(min < max) { // find insertIndex in O(log n)
+			if (lessThan(arr, i, insertIndex, mods)) {
+				max = insertIndex;
+			}
+			else if (lessThan(arr, insertIndex, i, mods)) {
+				min = insertIndex + 1;
+			}
+			else
+				break;
+			insertIndex = Math.floor((min + max) / 2);
+		}
+		for (var j = i; j > insertIndex; j--)
+			swap(arr, j, j - 1, mods);
+	}
+
+	return mods;
+}
+
+
+
 
 
 

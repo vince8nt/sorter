@@ -194,7 +194,7 @@ sortType.addButton(10, 540, 100, 50, "Gnome Sort");
 sortType.addButton(10, 600, 100, 50, "Cocktail Shaker");
 sortType.addButton(10, 660, 100, 50, "Selection Sort");
 
-sortType.addButton(120, 480, 100, 50, "-Optimized Bubble");
+sortType.addButton(120, 480, 100, 50, "Binary Gnome Sort");
 sortType.addButton(120, 540, 100, 50, "Optimized Gnome");
 sortType.addButton(120, 600, 100, 50, "Optimized Shaker");
 sortType.addButton(120, 660, 100, 50, "Min Max Selection");
@@ -345,8 +345,8 @@ c.addEventListener('click', function(event) {
 		if (sortType.getSelected() === "Bubble Sort") {
     		doMods(bubbleSort(myGraph.getItems()));
 		}
-		else if (sortType.getSelected() === "Optimized Bubble") {
-    		
+		else if (sortType.getSelected() === "Binary Gnome Sort") {
+    		doMods(binaryOptimizedGnomeSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Gnome Sort") {
     		doMods(gnomeSort(myGraph.getItems()));
@@ -429,6 +429,8 @@ c.addEventListener('click', function(event) {
 function doMods(mods) {
 	console.log("Sort is " + mods.length + " long.");
 	var delay = 1000 / myGraph.getLength();
+	if (myGraph.getLength() == 1024)
+		delay = 0;
 	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0);
 }
 

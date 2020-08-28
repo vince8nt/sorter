@@ -42,6 +42,16 @@ function getIndex(arr, index, mods) { // 1 read
 	return arr[index];
 }
 
+function auxSetIndex(arr, index, value, mods) { // 1 write to aux array
+	mods.push(["aux write", index, value]);
+	arr[index] = value;
+}
+
+function auxGetIndex(arr, index, mods) { // 1 read
+	mods.push(["aux read", index]);
+	return arr[index];
+}
+
 function reverse(arr, begin, end, mods) {
 	while (begin < end)
 		swap(arr, begin++, end--, mods);

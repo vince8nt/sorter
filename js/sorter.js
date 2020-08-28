@@ -212,7 +212,7 @@ sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
 // sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
 // sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
 
-shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
+shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
 addButton = new Button(780, 540, 50, 50, "+", "#20C010", "#000000");
 sizeDisp = new Button(730, 540, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
@@ -400,17 +400,21 @@ function doMods(mods) {
 
 function modify(mods, i, delay, reads, writes, comps) {
 	if (i < mods.length) {
-		if (mods[i][0] === "read") {
+		const modType = mods[i][0];
+		if (modType === "read" || modType === "aux read") {
 			modify(mods, i + 1, delay, reads + 1, writes, comps);
 		}
 		else {
-			if (mods[i][0] === "compare") {
+			if (modType === "compare") {
 				comps++;
 				myGraph.highlight([mods[i][1], mods[i][2]]);
 			}
-			else if (mods[i][0] === "write") {
+			else if (modType === "write") {
 				writes++;
 				myGraph.replace(mods[i][1], mods[i][2]);
+			}
+			else if (modType === "aux write") {
+				writes++;
 			}
 			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps);
 		}

@@ -41,7 +41,7 @@ function backMinHeapSort(arr) {
 
 function medianHeapSort(arr) {
 	var mods = [];
-	medianHeapSort2R(arr, 0, arr.length - 1, mods);
+	medianHeapSortR(arr, 0, arr.length - 1, mods);
 	return mods;
 }
 

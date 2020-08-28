@@ -198,7 +198,7 @@ sortType.addButton(230, 540, 100, 50, "Min Max Selection");
 sortType.addButton(340, 480, 100, 50, "Min Heap Sort");
 sortType.addButton(340, 540, 100, 50, "Reverse Min Heap");
 sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
-sortType.addButton(450, 540, 100, 50, "In-Place Merge");
+sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
 
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
@@ -332,8 +332,8 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Reverse Min Heap") {
     		doMods(backMinHeapSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "-In-Place Merge") {
-    		
+    	else if (sortType.getSelected() === "Median Heap Sort") {
+    		doMods(medianHeapSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Quicksort") {
     		doMods(quicksort(myGraph.getItems()));

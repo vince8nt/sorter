@@ -196,7 +196,7 @@ sortType.addButton(10, 660, 100, 50, "Selection Sort");
 
 sortType.addButton(120, 480, 100, 50, "-Optimized Bubble");
 sortType.addButton(120, 540, 100, 50, "Optimized Gnome");
-sortType.addButton(120, 600, 100, 50, "-Optimized Shaker");
+sortType.addButton(120, 600, 100, 50, "Optimized Shaker");
 sortType.addButton(120, 660, 100, 50, "Min Max Selection");
 
 sortType.addButton(230, 480, 100, 50, "Insertion Sort");
@@ -348,7 +348,7 @@ c.addEventListener('click', function(event) {
     		doMods(cocktailShaker(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Optimized Shaker") {
-    		// doMods(optimizedCocktailShaker(myGraph.getItems()));
+    		doMods(optimizedCocktailShaker(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Selection Sort") {
     		doMods(selectionSort(myGraph.getItems()));

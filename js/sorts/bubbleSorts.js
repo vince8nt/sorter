@@ -39,54 +39,37 @@ function cocktailShaker(arr) {
 }
 
 // change this
-function optimizedCocktailShaker() { // bidirectional bubble sort
-	var swaps = []; // [[[highlights], [swaps]], etc]
-	var graphCopy = [...myGraph.getItems()];
+function optimizedCocktailShaker(arr) {
+	var mods = [];
 
-	const end = graphCopy.length - 1;
+	const end = arr.length - 1;
 	var min = 0;
 	var max = end;
 	var lastSwap;
 	while (min < max) {
 		lastSwap = -1;
 		for (var i = min; i < end; i++) {
-			if (parseInt(graphCopy[i]) > parseInt(graphCopy[i + 1])) {
-				swaps.push([[i, i + 1], [i, i + 1]]);
-				var temp = graphCopy[i];
-				graphCopy[i] = graphCopy[i + 1];
-				graphCopy[i + 1] = temp;
+			if (lessThan(arr, i + 1, i, mods)) {
+				swap(arr, i + 1, i, mods);
 				lastSwap = i;
 			}
-			else {
-				swaps.push([[i, i + 1], [-1, -1]]);
-				if (i > max - 2)
-					break;
-			}
-			
+			else if (i > max - 2)
+				break;
 		}
-		// console.log("end bubble right: max = " + lastSwap);
 		max = lastSwap;
-
 
 		lastSwap = end + 1;
 		for (var i = max; i > 0; i--) {
-			if (parseInt(graphCopy[i - 1]) > parseInt(graphCopy[i])) {
-				swaps.push([[i - 1, i], [i - 1, i]]);
-				var temp = graphCopy[i - 1];
-				graphCopy[i - 1] = graphCopy[i];
-				graphCopy[i] = temp;
+			if (lessThan(arr, i, i - 1, mods)) {
+				swap(arr, i, i - 1, mods);
 				lastSwap = i;
 			}
-			else {
-				swaps.push([[i - 1, i], [-1, -1]]);
-				if (i < min + 2)
-					break;
-			}
+			else if (i < min + 2)
+				break;
 		}
-		// console.log("end bubble left: min = " + lastSwap);
 		min = lastSwap;
 	}
-	return swaps;
+	return mods;
 }
 
 function gnomeSort(arr) {

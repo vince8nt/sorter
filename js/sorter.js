@@ -183,22 +183,34 @@ class Graph {
 
 // make visuals -------------------------------------------------------------------
 
-myGraph = new Graph(0, 0, 1000, 400);
+myGraph = new Graph(0, 0, 1024, 410);
 
-ctx.fillStyle = "#FFFFFF";
-ctx.fillRect(0, 470, 1000, 130);
+ctx.fillStyle = "#FFFFFF"; // draw white box behind the buttons
+ctx.fillRect(0, 470, 1024, 250);
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
 sortType.addButton(10, 480, 100, 50, "Bubble Sort");
 sortType.addButton(10, 540, 100, 50, "Gnome Sort");
-sortType.addButton(120, 480, 100, 50, "Selection Sort");
-sortType.addButton(120, 540, 100, 50, "Cocktail Shaker");
-sortType.addButton(230, 480, 100, 50, "Quicksort");
-sortType.addButton(230, 540, 100, 50, "Min Max Selection");
-sortType.addButton(340, 480, 100, 50, "Min Heap Sort");
-sortType.addButton(340, 540, 100, 50, "Reverse Min Heap");
-sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
-sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
+sortType.addButton(10, 600, 100, 50, "Cocktail Shaker");
+sortType.addButton(10, 660, 100, 50, "Selection Sort");
+
+sortType.addButton(120, 480, 100, 50, "-Optimized Bubble");
+sortType.addButton(120, 540, 100, 50, "Optimized Gnome");
+sortType.addButton(120, 600, 100, 50, "-Optimized Shaker");
+sortType.addButton(120, 660, 100, 50, "Min Max Selection");
+
+sortType.addButton(230, 480, 100, 50, "Insertion Sort");
+sortType.addButton(230, 540, 100, 50, "Quicksort");
+sortType.addButton(230, 600, 100, 50, "Max Heap Sort");
+sortType.addButton(230, 660, 100, 50, "Reverse Min Heap");
+
+sortType.addButton(340, 480, 100, 50, "Binary Insertion");
+sortType.addButton(340, 540, 100, 50, "Quick Converge");
+sortType.addButton(340, 600, 100, 50, "Min Heap Sort");
+sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
+
+// sortType.addButton(450, 480, 100, 50, "Max Heap Sort");
+// sortType.addButton(450, 540, 100, 50, "Median Heap Sort");
 
 shuffleButton = new Button(560, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
@@ -323,30 +335,52 @@ c.addEventListener('click', function(event) {
 		if (sortType.getSelected() === "Bubble Sort") {
     		doMods(bubbleSort(myGraph.getItems()));
 		}
-    	else if (sortType.getSelected() === "Cocktail Shaker") {
-    		doMods(cocktailShaker(myGraph.getItems()));
+		else if (sortType.getSelected() === "Optimized Bubble") {
+    		
     	}
     	else if (sortType.getSelected() === "Gnome Sort") {
     		doMods(gnomeSort(myGraph.getItems()));
     	}
+    	else if (sortType.getSelected() === "Optimized Gnome") {
+    		doMods(optimizedGnomeSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Cocktail Shaker") {
+    		doMods(cocktailShaker(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Optimized Shaker") {
+    		// doMods(optimizedCocktailShaker(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Selection Sort") {
+    		doMods(selectionSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Min Max Selection") {
+    		doMods(minMaxSelectionSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Insertion Sort") {
+    		doMods(insertionSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Binary Insertion") {
+    		doMods(binaryInsertionSort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Quicksort") {
+    		doMods(quicksort(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Quick Converge") {
+    		doMods(quicksortConv(myGraph.getItems()));
+    	}
+    	
     	else if (sortType.getSelected() === "Reverse Min Heap") {
     		doMods(backMinHeapSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Median Heap Sort") {
     		doMods(medianHeapSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "Quicksort") {
-    		doMods(quicksort(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Min Max Selection") {
-    		doMods(minMaxSelectionSort(myGraph.getItems()));
-    	}
+    	
+    	
     	else if (sortType.getSelected() === "Min Heap Sort") {
     		doMods(minHeapSort(myGraph.getItems()));
     	}
-    	else if (sortType.getSelected() === "Selection Sort") {
-    		doMods(selectionSort(myGraph.getItems()));
-    	}
+    	
     	else if (sortType.getSelected() === "Max Heap Sort") {
     		doMods(maxHeapSort(myGraph.getItems()));
     	}

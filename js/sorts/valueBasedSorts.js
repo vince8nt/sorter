@@ -74,23 +74,19 @@ function binaryRadixLSD(arr) {
 	// find the number represented by the most significant bit of the largest value
 	var sigBit = Math.floor(Math.log(maxValue) / Math.log(2));
 	var bitNum = Math.round(Math.pow(2, sigBit));
-	console.log("sigBit is " + sigBit + " - " + bitNum);
 
 	for (var bit = 1; bit <= bitNum; bit*= 2) {
-		console.log("bit is " + bit);
 		var auxIndex = 0;
 		for (var i = 0; i < arr.length; i++) {
 			if ((getIndex(arr, i, mods)) & (bit)) {
 				// do nothing
 			}
 			else {
-				console.log("did 0 write");
 				auxSetIndex(aux, auxIndex++, getIndex(arr, i, mods), mods);
 			}
 		}
 		for (var i = 0; i < arr.length; i++) {
 			if ((getIndex(arr, i, mods) ) & (bit)) {
-				console.log("did 1 write");
 				auxSetIndex(aux, auxIndex++, getIndex(arr, i, mods), mods);
 			}
 		}

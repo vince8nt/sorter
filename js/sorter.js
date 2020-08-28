@@ -214,6 +214,8 @@ sortType.addButton(450, 540, 100, 50, "Counting Sort");
 sortType.addButton(450, 600, 100, 50, "Binary Radix MSD");
 sortType.addButton(450, 660, 100, 50, "Binary Radix LSD");
 
+sortType.addButton(560, 480, 100, 50, "Reverse Array");
+
 shuffleButton = new Button(680, 600, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(705, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
 addButton = new Button(780, 540, 50, 50, "+", "#20C010", "#000000");
@@ -395,6 +397,10 @@ c.addEventListener('click', function(event) {
     	}
     	else if (sortType.getSelected() === "Binary Radix LSD") {
     		doMods(binaryRadixLSD(myGraph.getItems()));
+    	}
+
+    	else if (sortType.getSelected() === "Reverse Array") {
+    		doMods(reverseArray(myGraph.getItems()));
     	}
     	
 

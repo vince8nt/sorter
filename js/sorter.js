@@ -220,6 +220,12 @@ sortType.addButton(584, 660, 100, 50, "Split Array");
 sortType.addButton(694, 600, 100, 50, "Bell Curve Array");
 sortType.addButton(694, 660, 100, 50, "Half Reverse");
 
+sortType.addButton(804, 600, 100, 50, "Interlace Array");
+sortType.addButton(804, 660, 100, 50, "Heapify Array");
+
+sortType.addButton(914, 600, 100, 50, "Half Shuffle");
+sortType.addButton(914, 660, 100, 50, "Bad Shuffle");
+
 shuffleButton = new Button(584, 480, 110, 110, "Shuffle", "#20C010", "#000000");
 dupButton = new Button(729, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
 addButton = new Button(804, 540, 50, 50, "+", "#20C010", "#000000");
@@ -415,7 +421,18 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Half Reverse") {
     		doMods(halfReverseArray(myGraph.getItems()));
     	}
-    	
+    	else if (sortType.getSelected() === "Interlace Array") {
+    		doMods(interlaceArray(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Heapify Array") {
+    		doMods(heapifyArray(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Half Shuffle") {
+    		doMods(halfShuffleArray(myGraph.getItems()));
+    	}
+    	else if (sortType.getSelected() === "Bad Shuffle") {
+    		doMods(badShuffleArray(myGraph.getItems()));
+    	}
 
     	
     	else {

@@ -25,6 +25,45 @@ function splitArray(arr) {
 	return mods;
 }
 
+function interlaceArray(arr) {
+	var mods = [];
+	var aux = []; // make aux array
+	for (var i = 0; i < arr.length; i++)
+		aux.push(0);
+	var arrI = 0
+	for (var i = 0; i < aux.length; i+= 2, arrI++)
+		aux[i] = arr[arrI];
+	for (var i = 1; i < aux.length; i+= 2, arrI++)
+		aux[i] = arr[arrI];
+	for (var i = 0; i < arr.length; i++)
+		setIndex(arr, i, auxGetIndex(aux, i, mods), mods);
+	return mods;
+}
+
+function heapifyArray(arr) {
+	var mods = [];
+	buildMaxHeap(arr, 0, arr.length - 1, mods);
+	return mods;
+}
+
+function halfShuffleArray(arr) {
+	var mods = [];
+	for (var i = arr.length - 1; i > 0; i-= 2) {
+		const j = Math.floor(Math.random() * i);
+		swap(arr, i, j, mods);
+	}
+	return mods;
+}
+
+function badShuffleArray(arr) {
+	var mods = [];
+	for (var i = arr.length - 1; i > 0; i-= 4) {
+		const j = Math.floor(Math.random() * i);
+		swap(arr, i, j, mods);
+	}
+	return mods;
+}
+
 function bellCurveArray(arr) {
 	var mods = [];
 	for (var i = 0; i < arr.length; i++) {
@@ -35,3 +74,14 @@ function bellCurveArray(arr) {
 	}
 	return mods;
 }
+
+
+
+
+
+
+
+
+
+
+

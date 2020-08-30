@@ -513,7 +513,7 @@ function modify(mods, i, reads, writes, comps, ending) {
 		}
 	}
 	else {
-		setTimeout(endMods, 0, reads, writes, comps, ending);
+		setTimeout(endMods, 100, reads, writes, comps, ending);
 	}
 }
 

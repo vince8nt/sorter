@@ -234,14 +234,14 @@ arrType.addButton(694, 430, 100, 50, "Duplicates Array");
 arrType.addButton(804, 430, 100, 50, "Parabola Array");
 arrType.addButton(914, 430, 100, 50, "Bell Curve Array");
 
-delayLabel = new Button(584, 490, 150, 60, "Sort Delay (ms)", "#A0A0A0", "#A0A0A0");
+delayLabel = new Button(584, 490, 150, 60, "Sort Delay (ms)", "#DCDC00", "#DCDC00");
 subDelayButton = new Button(584, 550, 50, 50, "-", "#C01010", "#000000");
-delayDisp = new Button(634, 550, 50, 50, "15", "#A0A0A0", "#A0A0A0");
+delayDisp = new Button(634, 550, 50, 50, "15", "#DCDC00", "#DCDC00");
 addDelayButton = new Button(684, 550, 50, 50, "+", "#20C010", "#000000");
 
-delayLabel = new Button(744, 490, 150, 60, "Array Size", "#A0A0A0", "#A0A0A0");
+sizeLabel = new Button(744, 490, 150, 60, "Array Size", "#DCDC00", "#DCDC00");
 subButton = new Button(744, 550, 50, 50, "-", "#C01010", "#000000");
-sizeDisp = new Button(794, 550, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
+sizeDisp = new Button(794, 550, 50, 50, myGraph.getLength(), "#DCDC00", "#DCDC00");
 addButton = new Button(844, 550, 50, 50, "+", "#20C010", "#000000");
 
 goButton = new Button(904, 490, 110, 110, "Sort", "#20C010", "#000000");
@@ -294,6 +294,10 @@ function disableButtons() {
 
 	arrType.setBorder("#707070");
 	arrType.setColor("#909090");
+	sizeLabel.setBorder("#909090");
+	sizeLabel.setColor("#909090");
+	sizeDisp.setBorder("#909090");
+	sizeDisp.setColor("#909090");
 	addButton.setBorder("#707070");
 	addButton.setColor("#909090");
 	subButton.setBorder("#707070");
@@ -309,6 +313,10 @@ function enableButtons() {
 
 	arrType.setBorder("#707070");
 	arrType.setColor("#ADD8E6");
+	sizeLabel.setBorder("#DCDC00");
+	sizeLabel.setColor("#DCDC00");
+	sizeDisp.setBorder("#DCDC00");
+	sizeDisp.setColor("#DCDC00");
 	if (myGraph.getLength() < 1000) {
 		addButton.setBorder("#000000");
 		addButton.setColor("#20C010");

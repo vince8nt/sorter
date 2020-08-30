@@ -107,8 +107,7 @@ class Graph {
 		this.color = "#FFFFFF";
 		this.compColor = "#00FF00";
 		this.writeColor = "#FF0000";
-		this.duplicates = false;
-		this.setLength(32);
+		this.setLength(32, "Uniform Array");
 		this.lastHighlight = [];
 	}
 	draw() {
@@ -148,33 +147,47 @@ class Graph {
 	getLength() {
 		return this.items.length;
 	}
-	setLength(newLength) {
+	setLength(newLength, arrType) {
 		if (newLength > 1) {
 			this.items = [];
-			for (var i = 0; i < newLength; i++) {
-				if (this.duplicates && Math.random() < 0.5 && i > 0)
-					this.items.push(i - 1);
-				else
+			if (arrType === "Duplicates Array") {
+				var aux = []; // make aux array
+				for (var i = 0; i < newLength; i++)
+					aux.push(0);
+				for (var i = 0; i < newLength; i++)
+					aux[Math.floor(Math.random() * newLength)]++;
+				for (var i = 1; i < aux.length; i++)
+					aux[i] += aux[i - 1];
+				var index = 0;
+				for (var i = 0; i < aux.length; i++) {
+					while (index < aux[i])
+						this.items[index++] = i;
+				}
+			}
+			else if (arrType === "Parabola Array") {
+				var max = Math.pow(0.5 - newLength / 2, 2);
+				var div = max / (newLength - 1);
+				for (var i = 0; i < newLength; i++) {
+					var x = (i + 0.5 - newLength / 2);
+					var y = newLength - 1 - Math.round(Math.pow(x, 2) / div);
+					this.items.push(y);
+				}
+			}
+			else if (arrType === "Bell Curve Array") {
+				for (var i = 0; i < newLength; i++) {
+					var x = (i + 0.5 - newLength / 2) / newLength * 4.5;
+					var y = Math.pow(2.718, -1 * Math.pow(x, 2));
+					y *= (newLength - 1);
+					this.items.push(Math.round(y));
+				}
+			}
+			else {
+				for (var i = 0; i < newLength; i++) {
 					this.items.push(i);
+				}
 			}
 			this.draw();
 		}
-	}
-	shuffle() {
-		for (var i = this.items.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * i);
-			const temp = this.items[i];
-			this.items[i] = this.items[j];
-  			this.items[j] = temp;
-		}
-		this.draw();
-	}
-	setDuplicates(hasDups) {
-		this.duplicates = hasDups;
-		this.setLength(this.items.length);
-	}
-	getDuplicates() {
-		return this.duplicates;
 	}
 	getItems() {
 		return [...this.items];
@@ -186,52 +199,61 @@ class Graph {
 myGraph = new Graph(0, 0, 1024, 410);
 
 ctx.fillStyle = "#FFFFFF"; // draw white box behind the buttons
-ctx.fillRect(0, 470, 1024, 250);
+ctx.fillRect(0, 420, 1024, 310);
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
-sortType.addButton(10, 480, 100, 50, "Bubble Sort");
-sortType.addButton(10, 540, 100, 50, "Gnome Sort");
-sortType.addButton(10, 600, 100, 50, "Cocktail Shaker");
-sortType.addButton(10, 660, 100, 50, "Selection Sort");
+sortType.addButton(10, 430, 100, 50, "Bubble Sort");
+sortType.addButton(10, 490, 100, 50, "Bubble Sort");
+sortType.addButton(10, 550, 100, 50, "Gnome Sort");
+sortType.addButton(10, 610, 100, 50, "Cocktail Shaker");
+sortType.addButton(10, 670, 100, 50, "Selection Sort");
 
-sortType.addButton(120, 480, 100, 50, "Binary Gnome Sort");
-sortType.addButton(120, 540, 100, 50, "Optimized Gnome");
-sortType.addButton(120, 600, 100, 50, "Optimized Shaker");
-sortType.addButton(120, 660, 100, 50, "Min Max Selection");
+sortType.addButton(120, 490, 100, 50, "Binary Gnome Sort");
+sortType.addButton(120, 550, 100, 50, "Optimized Gnome");
+sortType.addButton(120, 610, 100, 50, "Optimized Shaker");
+sortType.addButton(120, 670, 100, 50, "Min Max Selection");
 
-sortType.addButton(230, 480, 100, 50, "Insertion Sort");
-sortType.addButton(230, 540, 100, 50, "Quicksort");
-sortType.addButton(230, 600, 100, 50, "Max Heap Sort");
-sortType.addButton(230, 660, 100, 50, "Reverse Min Heap");
+sortType.addButton(230, 490, 100, 50, "Insertion Sort");
+sortType.addButton(230, 550, 100, 50, "Quicksort");
+sortType.addButton(230, 610, 100, 50, "Max Heap Sort");
+sortType.addButton(230, 670, 100, 50, "Reverse Min Heap");
 
-sortType.addButton(340, 480, 100, 50, "Binary Insertion");
-sortType.addButton(340, 540, 100, 50, "Quick Converge");
-sortType.addButton(340, 600, 100, 50, "Min Heap Sort");
-sortType.addButton(340, 660, 100, 50, "Median Heap Sort");
+sortType.addButton(340, 490, 100, 50, "Binary Insertion");
+sortType.addButton(340, 550, 100, 50, "Quick Converge");
+sortType.addButton(340, 610, 100, 50, "Min Heap Sort");
+sortType.addButton(340, 670, 100, 50, "Median Heap Sort");
 
-sortType.addButton(450, 480, 100, 50, "Merge Sort");
-sortType.addButton(450, 540, 100, 50, "Counting Sort");
-sortType.addButton(450, 600, 100, 50, "Binary Radix MSD");
-sortType.addButton(450, 660, 100, 50, "Binary Radix LSD");
+sortType.addButton(450, 490, 100, 50, "Merge Sort");
+sortType.addButton(450, 550, 100, 50, "Counting Sort");
+sortType.addButton(450, 610, 100, 50, "Binary Radix MSD");
+sortType.addButton(450, 670, 100, 50, "Binary Radix LSD");
 
-sortType.addButton(584, 600, 100, 50, "Reverse Array");
-sortType.addButton(584, 660, 100, 50, "Split Array");
+arrType = new Selector("#ADD8E6", "#707070", "#FF0000");
+arrType.addButton(584, 430, 100, 50, "Uniform Array");
+arrType.addButton(694, 430, 100, 50, "Duplicates Array");
+arrType.addButton(804, 430, 100, 50, "Parabola Array");
+arrType.addButton(914, 430, 100, 50, "Bell Curve Array");
 
-sortType.addButton(694, 600, 100, 50, "Bell Curve Array");
-sortType.addButton(694, 660, 100, 50, "Half Reverse");
+delayLabel = new Button(584, 490, 150, 60, "Sort Delay (ms)", "#A0A0A0", "#A0A0A0");
+subDelayButton = new Button(584, 550, 50, 50, "-", "#C01010", "#000000");
+delayDisp = new Button(634, 550, 50, 50, "15", "#A0A0A0", "#A0A0A0");
+addDelayButton = new Button(684, 550, 50, 50, "+", "#20C010", "#000000");
 
-sortType.addButton(804, 600, 100, 50, "Interlace Array");
-sortType.addButton(804, 660, 100, 50, "Heapify Array");
+delayLabel = new Button(744, 490, 150, 60, "Array Size", "#A0A0A0", "#A0A0A0");
+subButton = new Button(744, 550, 50, 50, "-", "#C01010", "#000000");
+sizeDisp = new Button(794, 550, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
+addButton = new Button(844, 550, 50, 50, "+", "#20C010", "#000000");
 
-sortType.addButton(914, 600, 100, 50, "Half Shuffle");
-sortType.addButton(914, 660, 100, 50, "Bad Shuffle");
+goButton = new Button(904, 490, 110, 110, "Sort", "#20C010", "#000000");
 
-shuffleButton = new Button(584, 480, 110, 110, "Shuffle", "#20C010", "#000000");
-dupButton = new Button(729, 480, 100, 50, "duplicates: off", "#C01010", "#000000");
-addButton = new Button(804, 540, 50, 50, "+", "#20C010", "#000000");
-sizeDisp = new Button(754, 540, 50, 50, myGraph.getLength(), "#A0A0A0", "#A0A0A0");
-subButton = new Button(704, 540, 50, 50, "-", "#C01010", "#000000");
-goButton = new Button(864, 480, 150, 110, "Go", "#20C010", "#000000");
+nonSortType = new Selector("#20C010", "#000000", "#000000");
+nonSortType.addButton(584, 610, 97, 50, "Reverse Array");
+nonSortType.addButton(584, 670, 97, 50, "Split Array");
+nonSortType.addButton(691, 610, 97, 50, "Bad Shuffle");
+nonSortType.addButton(691, 670, 97, 50, "Half Reverse");
+nonSortType.addButton(798, 610, 97, 50, "Interlace Array");
+nonSortType.addButton(798, 670, 97, 50, "Heapify Array");
+nonSortType.addButton(904, 610, 110, 110, "Shuffle");
 
 var sorting = false;
 
@@ -243,7 +265,7 @@ function doAdd() {
 		length *= 2;
 		subButton.setBorder("#000000");     // visually enable sub button
 		subButton.setColor("#C01010");
-		myGraph.setLength(length);        // set graph length
+		myGraph.setLength(length, arrType.getSelected());        // set graph length
 		sizeDisp.setLabel(length);          // set length label
 		if (length > 512) {
 			addButton.setBorder("#707070"); // visually disable add button
@@ -258,7 +280,7 @@ function doSub() {
 		length = Math.floor(length / 2);
 		addButton.setBorder("#000000");     // visually enable add button
 		addButton.setColor("#20C010");
-		myGraph.setLength(length);        // set graph length
+		myGraph.setLength(length, arrType.getSelected());        // set graph length
 		sizeDisp.setLabel(length);          // set length label
 		if (length < 4) {
 			subButton.setBorder("#707070"); // visually disable sub button
@@ -267,27 +289,11 @@ function doSub() {
 	}
 }
 
-function clickDuplicates() {
-	myGraph.setDuplicates(!myGraph.getDuplicates());
-	if (myGraph.getDuplicates()) {
-		dupButton.setColor("#20C010");
-		dupButton.setLabel("duplicates: on");
-    }
-    else {
-		dupButton.setColor("#C01010");
-		dupButton.setLabel("duplicates: off");
-    }
-}
-
 function disableButtons() {
 	sorting = true;
 
 	sortType.setBorder("#707070");
 	sortType.setColor("#909090");
-	shuffleButton.setBorder("#707070");
-	shuffleButton.setColor("#909090");
-	dupButton.setBorder("#707070");
-	dupButton.setColor("#909090");
 	addButton.setBorder("#707070");
 	addButton.setColor("#909090");
 	subButton.setBorder("#707070");
@@ -301,13 +307,6 @@ function enableButtons() {
 
 	sortType.setBorder("#707070");
 	sortType.setColor("#9090FF");
-	shuffleButton.setBorder("#000000");
-	shuffleButton.setColor("#20C010");
-	dupButton.setBorder("#000000");
-	if (myGraph.getDuplicates())
-		dupButton.setColor("#20C010");
-	else
-		dupButton.setColor("#C01010");
 	if (myGraph.getLength() < 1000) {
 		addButton.setBorder("#000000");
 		addButton.setColor("#20C010");
@@ -329,10 +328,16 @@ c.addEventListener('click', function(event) {
     if (sortType.clicked(screenX, screenY)) {           // selector buttons
     	console.log("selector button clicked");
     }
+    else if (arrType.clicked(screenX, screenY)) {           // selector buttons
+    	console.log("arr type button clicked");
+    	myGraph.setLength(myGraph.getLength(), arrType.getSelected());
+    }
+    /*
     else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
     	console.log("shuffle button clicked");
     	myGraph.shuffle();
     }
+    */
     else if (addButton.clicked(screenX, screenY)) {     // add button
     	console.log("add button clicked");
     	doAdd();
@@ -341,9 +346,34 @@ c.addEventListener('click', function(event) {
     	console.log("subtract button clicked");
     	doSub();
     }
-    else if (dupButton.clicked(screenX, screenY)) {     // duplicates button
-    	console.log("duplicates button clicked");
-    	clickDuplicates();
+    else if (nonSortType.clicked(screenX, screenY)) {           // selector buttons
+    	console.log("non Sort type button clicked");
+    	disableButtons();
+    	if (nonSortType.getSelected() === "Reverse Array") {
+    		doMods(reverseArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Split Array") {
+    		doMods(splitArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Bad Shuffle") {
+    		doMods(badShuffleArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Half Reverse") {
+    		doMods(halfReverseArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Interlace Array") {
+    		doMods(interlaceArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Heapify Array") {
+    		doMods(heapifyArray(myGraph.getItems()));
+    	}
+    	else if (nonSortType.getSelected() === "Shuffle"){ // shuffle
+    		doMods(shuffleArray(myGraph.getItems()));
+    	}
+    	else {
+    		enableButtons();
+    		console.log("Failed to find " + nonSortType.getSelected() + " non sort.");
+    	}
     }
     else if (goButton.clicked(screenX, screenY)) {      // go button
     	console.log("Go button clicked. Using " + sortType.getSelected() + " sort.");
@@ -408,33 +438,6 @@ c.addEventListener('click', function(event) {
     	else if (sortType.getSelected() === "Binary Radix LSD") {
     		doMods(binaryRadixLSD(myGraph.getItems()));
     	}
-
-    	else if (sortType.getSelected() === "Reverse Array") {
-    		doMods(reverseArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Split Array") {
-    		doMods(splitArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Bell Curve Array") {
-    		doMods(bellCurveArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Half Reverse") {
-    		doMods(halfReverseArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Interlace Array") {
-    		doMods(interlaceArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Heapify Array") {
-    		doMods(heapifyArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Half Shuffle") {
-    		doMods(halfShuffleArray(myGraph.getItems()));
-    	}
-    	else if (sortType.getSelected() === "Bad Shuffle") {
-    		doMods(badShuffleArray(myGraph.getItems()));
-    	}
-
-    	
     	else {
     		enableButtons();
     		console.log("Failed to find " + sortType.getSelected() + " sort.");

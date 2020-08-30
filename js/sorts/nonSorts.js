@@ -46,10 +46,10 @@ function heapifyArray(arr) {
 	return mods;
 }
 
-function halfShuffleArray(arr) {
+function shuffleArray(arr) {
 	var mods = [];
-	for (var i = arr.length - 1; i > 0; i-= 2) {
-		const j = Math.floor(Math.random() * i);
+	for (var i = arr.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
 		swap(arr, i, j, mods);
 	}
 	return mods;
@@ -57,23 +57,16 @@ function halfShuffleArray(arr) {
 
 function badShuffleArray(arr) {
 	var mods = [];
-	for (var i = arr.length - 1; i > 0; i-= 4) {
-		const j = Math.floor(Math.random() * i);
-		swap(arr, i, j, mods);
+	for (var i = arr.length - 1; i > 0; i--) {
+		if (Math.random() < 0.2) {
+			const j = Math.floor(Math.random() * arr.length);
+			swap(arr, i, j, mods);
+		}
 	}
 	return mods;
 }
 
-function bellCurveArray(arr) {
-	var mods = [];
-	for (var i = 0; i < arr.length; i++) {
-		var x = (i + 0.5 - arr.length / 2) / arr.length * 4.5;
-		var y = Math.pow(2.718, -1 * Math.pow(x, 2));
-		y *= (arr.length - 1);
-		setIndex(arr, i, Math.round(y), mods);
-	}
-	return mods;
-}
+
 
 
 

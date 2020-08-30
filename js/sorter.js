@@ -445,7 +445,7 @@ c.addEventListener('click', function(event) {
     		doMods(insertionSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Binary Insertion") {
-    		doMods(binaryInsertionSort(myGraph.getItems()));
+    		doMods(binaryInsertionSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Quicksort") {
     		doMods(quicksort(myGraph.getItems()), true);

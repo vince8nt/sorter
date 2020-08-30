@@ -196,6 +196,9 @@ class Graph {
 
 // make visuals -------------------------------------------------------------------
 
+var sorting = false;
+var delay = 20;
+
 myGraph = new Graph(0, 0, 1024, 410);
 
 ctx.fillStyle = "#FFFFFF"; // draw white box behind the buttons
@@ -236,7 +239,7 @@ arrType.addButton(914, 430, 100, 50, "Bell Curve Array");
 
 delayLabel = new Button(584, 490, 150, 60, "Sort Delay (ms)", "#DCDC00", "#DCDC00");
 subDelayButton = new Button(584, 550, 50, 50, "-", "#C01010", "#000000");
-delayDisp = new Button(634, 550, 50, 50, "15", "#DCDC00", "#DCDC00");
+delayDisp = new Button(634, 550, 50, 50, delay, "#DCDC00", "#DCDC00");
 addDelayButton = new Button(684, 550, 50, 50, "+", "#20C010", "#000000");
 
 sizeLabel = new Button(744, 490, 150, 60, "Array Size", "#DCDC00", "#DCDC00");
@@ -255,7 +258,6 @@ nonSortType.addButton(798, 610, 97, 50, "Interlace Array");
 nonSortType.addButton(798, 670, 97, 50, "Heapify Array");
 nonSortType.addButton(904, 610, 110, 110, "Shuffle");
 
-var sorting = false;
 
 // program starts here ------------------------------------------------------------
 
@@ -285,6 +287,32 @@ function doSub() {
 		if (length < 4) {
 			subButton.setBorder("#707070"); // visually disable sub button
 			subButton.setColor("#909090");
+		}
+	}
+}
+
+function delayAdd() {
+	if (delay <= 90) {
+		delay += 10;
+		subDelayButton.setBorder("#000000");     // visually enable sub button
+		subDelayButton.setColor("#C01010");
+		delayDisp.setLabel(delay);               // set delay label
+		if (delay > 90) {
+			addDelayButton.setBorder("#707070"); // visually disable add button
+			addDelayButton.setColor("#909090");
+		}
+	}
+}
+
+function delaySub() {
+	if (delay >= 10) {
+		delay -= 10;
+		addDelayButton.setBorder("#000000");     // visually enable add button
+		addDelayButton.setColor("#20C010");
+		delayDisp.setLabel(delay);              // set delay label
+		if (delay < 10) {
+			subDelayButton.setBorder("#707070"); // visually disable sub button
+			subDelayButton.setColor("#909090");
 		}
 	}
 }
@@ -340,12 +368,16 @@ c.addEventListener('click', function(event) {
     	console.log("arr type button clicked");
     	myGraph.setLength(myGraph.getLength(), arrType.getSelected());
     }
-    /*
-    else if (shuffleButton.clicked(screenX, screenY)) { // shuffle button
-    	console.log("shuffle button clicked");
-    	myGraph.shuffle();
+    
+    else if (addDelayButton.clicked(screenX, screenY)) {     // add delay button
+    	console.log("add delay button clicked");
+    	delayAdd();
     }
-    */
+    else if (subDelayButton.clicked(screenX, screenY)) {     // subtract delay button
+    	console.log("subtract delay button clicked");
+    	delaySub();
+    }
+
     else if (addButton.clicked(screenX, screenY)) {     // add button
     	console.log("add button clicked");
     	doAdd();
@@ -354,7 +386,7 @@ c.addEventListener('click', function(event) {
     	console.log("subtract button clicked");
     	doSub();
     }
-    else if (nonSortType.clicked(screenX, screenY)) {           // selector buttons
+    else if (nonSortType.clicked(screenX, screenY)) {           // non-sort buttons
     	console.log("non Sort type button clicked");
     	disableButtons();
     	if (nonSortType.getSelected() === "Reverse Array") {
@@ -456,17 +488,15 @@ c.addEventListener('click', function(event) {
 
 function doMods(mods, ending) {
 	console.log("Sort is " + mods.length + " long.");
-	var delay = 1000 / myGraph.getLength();
-	if (myGraph.getLength() == 1024)
-		delay = 0;
-	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0, ending);
+	
+	setTimeout(modify, 100, mods, 0, 0, 0, 0, ending);
 }
 
-function modify(mods, i, delay, reads, writes, comps, ending) {
+function modify(mods, i, reads, writes, comps, ending) {
 	if (i < mods.length) {
 		const modType = mods[i][0];
 		if (modType === "read" || modType === "aux read") {
-			modify(mods, i + 1, delay, reads + 1, writes, comps, ending); // fix this so it doesn't overdo the stack
+			modify(mods, i + 1, reads + 1, writes, comps, ending); // fix this so it doesn't overdo the stack
 		}
 		else {
 			if (modType === "compare") {
@@ -481,11 +511,11 @@ function modify(mods, i, delay, reads, writes, comps, ending) {
 				writes++;
 				myGraph.drawUnHighlight();
 			}
-			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps, ending);
+			setTimeout(modify, delay, mods, i + 1, reads, writes, comps, ending);
 		}
 	}
 	else {
-		setTimeout(endMods, 100, reads, writes, comps, ending);
+		setTimeout(endMods, 0, reads, writes, comps, ending);
 	}
 }
 

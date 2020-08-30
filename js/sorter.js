@@ -350,25 +350,25 @@ c.addEventListener('click', function(event) {
     	console.log("non Sort type button clicked");
     	disableButtons();
     	if (nonSortType.getSelected() === "Reverse Array") {
-    		doMods(reverseArray(myGraph.getItems()));
+    		doMods(reverseArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Split Array") {
-    		doMods(splitArray(myGraph.getItems()));
+    		doMods(splitArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Bad Shuffle") {
-    		doMods(badShuffleArray(myGraph.getItems()));
+    		doMods(badShuffleArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Half Reverse") {
-    		doMods(halfReverseArray(myGraph.getItems()));
+    		doMods(halfReverseArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Interlace Array") {
-    		doMods(interlaceArray(myGraph.getItems()));
+    		doMods(interlaceArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Heapify Array") {
-    		doMods(heapifyArray(myGraph.getItems()));
+    		doMods(heapifyArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Shuffle"){ // shuffle
-    		doMods(shuffleArray(myGraph.getItems()));
+    		doMods(shuffleArray(myGraph.getItems()), false);
     	}
     	else {
     		enableButtons();
@@ -379,64 +379,64 @@ c.addEventListener('click', function(event) {
     	console.log("Go button clicked. Using " + sortType.getSelected() + " sort.");
     	disableButtons();
 		if (sortType.getSelected() === "Bubble Sort") {
-    		doMods(bubbleSort(myGraph.getItems()));
+    		doMods(bubbleSort(myGraph.getItems()), true);
 		}
 		else if (sortType.getSelected() === "Binary Gnome Sort") {
-    		doMods(binaryOptimizedGnomeSort(myGraph.getItems()));
+    		doMods(binaryOptimizedGnomeSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Gnome Sort") {
-    		doMods(gnomeSort(myGraph.getItems()));
+    		doMods(gnomeSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Optimized Gnome") {
-    		doMods(optimizedGnomeSort(myGraph.getItems()));
+    		doMods(optimizedGnomeSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Cocktail Shaker") {
-    		doMods(cocktailShaker(myGraph.getItems()));
+    		doMods(cocktailShaker(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Optimized Shaker") {
-    		doMods(optimizedCocktailShaker(myGraph.getItems()));
+    		doMods(optimizedCocktailShaker(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Selection Sort") {
-    		doMods(selectionSort(myGraph.getItems()));
+    		doMods(selectionSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Min Max Selection") {
-    		doMods(minMaxSelectionSort(myGraph.getItems()));
+    		doMods(minMaxSelectionSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Insertion Sort") {
-    		doMods(insertionSort(myGraph.getItems()));
+    		doMods(insertionSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Binary Insertion") {
     		doMods(binaryInsertionSort(myGraph.getItems()));
     	}
     	else if (sortType.getSelected() === "Quicksort") {
-    		doMods(quicksort(myGraph.getItems()));
+    		doMods(quicksort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Quick Converge") {
-    		doMods(quicksortConv(myGraph.getItems()));
+    		doMods(quicksortConv(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Max Heap Sort") {
-    		doMods(maxHeapSort(myGraph.getItems()));
+    		doMods(maxHeapSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Min Heap Sort") {
-    		doMods(minHeapSort(myGraph.getItems()));
+    		doMods(minHeapSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Reverse Min Heap") {
-    		doMods(backMinHeapSort(myGraph.getItems()));
+    		doMods(backMinHeapSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Median Heap Sort") {
-    		doMods(medianHeapSort(myGraph.getItems()));
+    		doMods(medianHeapSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Merge Sort") {
-    		doMods(mergeSort(myGraph.getItems()));
+    		doMods(mergeSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Counting Sort") {
-    		doMods(countingSort(myGraph.getItems()));
+    		doMods(countingSort(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Binary Radix MSD") {
-    		doMods(binaryRadixMSD(myGraph.getItems()));
+    		doMods(binaryRadixMSD(myGraph.getItems()), true);
     	}
     	else if (sortType.getSelected() === "Binary Radix LSD") {
-    		doMods(binaryRadixLSD(myGraph.getItems()));
+    		doMods(binaryRadixLSD(myGraph.getItems()), true);
     	}
     	else {
     		enableButtons();
@@ -446,19 +446,19 @@ c.addEventListener('click', function(event) {
     }
 }, false);
 
-function doMods(mods) {
+function doMods(mods, ending) {
 	console.log("Sort is " + mods.length + " long.");
 	var delay = 1000 / myGraph.getLength();
 	if (myGraph.getLength() == 1024)
 		delay = 0;
-	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0);
+	setTimeout(modify, 100, mods, 0, delay, 0, 0, 0, ending);
 }
 
-function modify(mods, i, delay, reads, writes, comps) {
+function modify(mods, i, delay, reads, writes, comps, ending) {
 	if (i < mods.length) {
 		const modType = mods[i][0];
 		if (modType === "read" || modType === "aux read") {
-			modify(mods, i + 1, delay, reads + 1, writes, comps); // fix this so it doesn't overdo the stack
+			modify(mods, i + 1, delay, reads + 1, writes, comps, ending); // fix this so it doesn't overdo the stack
 		}
 		else {
 			if (modType === "compare") {
@@ -473,18 +473,19 @@ function modify(mods, i, delay, reads, writes, comps) {
 				writes++;
 				myGraph.drawUnHighlight();
 			}
-			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps);
+			setTimeout(modify, delay, mods, i + 1, delay, reads, writes, comps, ending);
 		}
 	}
 	else {
-		setTimeout(endMods, 100, reads, writes, comps);
+		setTimeout(endMods, 100, reads, writes, comps, ending);
 	}
 }
 
-function endMods(reads, writes, comps) {
+function endMods(reads, writes, comps, ending) {
 	enableButtons();
 	myGraph.draw();
-	alert("Array sorted\ncomparisons: " + comps + "\nreads: " + reads + "\nwrites: " + writes);
+	if (ending)
+		alert("Array sorted\ncomparisons: " + comps + "\nreads: " + reads + "\nwrites: " + writes);
 }
 
 

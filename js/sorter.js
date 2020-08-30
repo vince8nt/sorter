@@ -292,21 +292,23 @@ function doSub() {
 function disableButtons() {
 	sorting = true;
 
-	sortType.setBorder("#707070");
-	sortType.setColor("#909090");
+	arrType.setBorder("#707070");
+	arrType.setColor("#909090");
 	addButton.setBorder("#707070");
 	addButton.setColor("#909090");
 	subButton.setBorder("#707070");
 	subButton.setColor("#909090");
 	goButton.setBorder("#707070");
 	goButton.setColor("#909090");
+	nonSortType.setBorder("#707070");
+	nonSortType.setColor("#909090");
 }
 
 function enableButtons() {
 	sorting = false;
 
-	sortType.setBorder("#707070");
-	sortType.setColor("#9090FF");
+	arrType.setBorder("#707070");
+	arrType.setColor("#ADD8E6");
 	if (myGraph.getLength() < 1000) {
 		addButton.setBorder("#000000");
 		addButton.setColor("#20C010");
@@ -317,6 +319,8 @@ function enableButtons() {
 	}
 	goButton.setBorder("#000000");
 	goButton.setColor("#20C010");
+	nonSortType.setBorder("#000000");
+	nonSortType.setColor("#20C010");
 }
 
 c.addEventListener('click', function(event) {

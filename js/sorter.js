@@ -356,19 +356,12 @@ function enableButtons() {
 }
 
 c.addEventListener('click', function(event) {
-	if (sorting) return; // does not allow modifications during the sorting process
-
     var screenX = event.pageX - c.offsetLeft - c.clientLeft;
     var screenY = event.pageY - c.offsetTop - c.clientTop;
     
     if (sortType.clicked(screenX, screenY)) {           // selector buttons
     	console.log("selector button clicked");
     }
-    else if (arrType.clicked(screenX, screenY)) {           // selector buttons
-    	console.log("arr type button clicked");
-    	myGraph.setLength(myGraph.getLength(), arrType.getSelected());
-    }
-    
     else if (addDelayButton.clicked(screenX, screenY)) {     // add delay button
     	console.log("add delay button clicked");
     	delayAdd();
@@ -378,6 +371,12 @@ c.addEventListener('click', function(event) {
     	delaySub();
     }
 
+    if (sorting) return; // does not allow modifications during the sorting process
+
+    if (arrType.clicked(screenX, screenY)) {           // selector buttons
+    	console.log("arr type button clicked");
+    	myGraph.setLength(myGraph.getLength(), arrType.getSelected());
+    }
     else if (addButton.clicked(screenX, screenY)) {     // add button
     	console.log("add button clicked");
     	doAdd();
@@ -488,7 +487,6 @@ c.addEventListener('click', function(event) {
 
 function doMods(mods, ending) {
 	console.log("Sort is " + mods.length + " long.");
-	
 	setTimeout(modify, 100, mods, 0, 0, 0, 0, ending);
 }
 

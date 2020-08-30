@@ -246,7 +246,7 @@ addButton = new Button(844, 550, 50, 50, "+", "#20C010", "#000000");
 
 goButton = new Button(904, 490, 110, 110, "Sort", "#20C010", "#000000");
 
-nonSortType = new Selector("#20C010", "#000000", "#000000");
+nonSortType = new Selector("#20C010", "#707070", "#707070");
 nonSortType.addButton(584, 610, 97, 50, "Reverse Array");
 nonSortType.addButton(584, 670, 97, 50, "Split Array");
 nonSortType.addButton(691, 610, 97, 50, "Bad Shuffle");
@@ -292,7 +292,6 @@ function doSub() {
 function disableButtons() {
 	sorting = true;
 
-	arrType.setBorder("#707070");
 	arrType.setColor("#909090");
 	sizeLabel.setBorder("#909090");
 	sizeLabel.setColor("#909090");
@@ -304,14 +303,12 @@ function disableButtons() {
 	subButton.setColor("#909090");
 	goButton.setBorder("#707070");
 	goButton.setColor("#909090");
-	nonSortType.setBorder("#707070");
 	nonSortType.setColor("#909090");
 }
 
 function enableButtons() {
 	sorting = false;
 
-	arrType.setBorder("#707070");
 	arrType.setColor("#ADD8E6");
 	sizeLabel.setBorder("#DCDC00");
 	sizeLabel.setColor("#DCDC00");
@@ -327,7 +324,6 @@ function enableButtons() {
 	}
 	goButton.setBorder("#000000");
 	goButton.setColor("#20C010");
-	nonSortType.setBorder("#000000");
 	nonSortType.setColor("#20C010");
 }
 

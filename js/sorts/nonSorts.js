@@ -46,6 +46,15 @@ function heapifyArray(arr) {
 	return mods;
 }
 
+function invertArray(arr) {
+	var mods = [];
+	var max = arr.length - 1;
+	for (var i = 0; i < arr.length; i++) {
+		setIndex(arr, i, max - arr[i], mods);
+	}
+	return mods;
+}
+
 function shuffleArray(arr) {
 	var mods = [];
 	for (var i = arr.length - 1; i > 0; i--) {

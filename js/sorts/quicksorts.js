@@ -34,7 +34,6 @@ function quicksortConv(arr) {
 
 function splitQuickConv(arr, begin, end, mods) {
 	if (begin < end) {
-		
 		var p = partitionConv(arr, begin, end, mods);
 		splitQuickConv(arr, begin, p - 1, mods);
 		splitQuickConv(arr, p + 1, end, mods);
@@ -42,26 +41,21 @@ function splitQuickConv(arr, begin, end, mods) {
 }
 
 function partitionConv(arr, begin, end, mods) {
-	swap(arr, Math.floor((end + begin) / 2), end, mods);
-	var p = end;
-	while (begin < end) {
-		if (lessThan(arr, p, begin, mods)) {
-			if (lessThan(arr, end, p, mods)) {
-				swap(arr, begin, end, mods);
-			}
-			else
-				end--;
+	var pivot = getIndex(arr, end, mods);
+	var i = begin;
+	var j = end - 1;
+	while (true) {
+		while (i < j && !valLessThan(arr, pivot, i, mods))
+			i++
+		while (i < j && !lessThanVal(arr, j, pivot, mods))
+			j--;
+		if (i >= j) {
+			if (i == j && lessThanVal(arr, i, pivot, mods))
+				i++
+			swap(arr, i, end, mods);
+			return i;
 		}
-		else
-			begin++;
-	}
-	if (lessThan(arr, end, p, mods)) {
-		swap(arr, p, end + 1, mods);
-		return end + 1;
-	}
-	else {
-		swap(arr, p, end, mods);
-		return end;
+		swap(arr, i++, j--, mods);
 	}
 }
 

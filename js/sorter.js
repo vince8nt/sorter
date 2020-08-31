@@ -255,7 +255,7 @@ nonSortType.addButton(584, 670, 97, 50, "Split Array");
 nonSortType.addButton(691, 610, 97, 50, "Bad Shuffle");
 nonSortType.addButton(691, 670, 97, 50, "Half Reverse");
 nonSortType.addButton(798, 610, 97, 50, "Interlace Array");
-nonSortType.addButton(798, 670, 97, 50, "Heapify Array");
+nonSortType.addButton(798, 670, 97, 50, "Invert Array");
 nonSortType.addButton(904, 610, 110, 110, "Shuffle");
 
 
@@ -403,8 +403,8 @@ c.addEventListener('click', function(event) {
     	else if (nonSortType.getSelected() === "Interlace Array") {
     		doMods(interlaceArray(myGraph.getItems()), false);
     	}
-    	else if (nonSortType.getSelected() === "Heapify Array") {
-    		doMods(heapifyArray(myGraph.getItems()), false);
+    	else if (nonSortType.getSelected() === "Invert Array") {
+    		doMods(invertArray(myGraph.getItems()), false);
     	}
     	else if (nonSortType.getSelected() === "Shuffle"){ // shuffle
     		doMods(shuffleArray(myGraph.getItems()), false);

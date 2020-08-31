@@ -21,7 +21,7 @@ function splitArray(arr) {
 	for (var i = 1; i < arr.length; i+= 2, auxI++)
 		aux[auxI] = arr[i];
 	for (var i = 0; i < arr.length; i++)
-		setIndex(arr, i, auxGetIndex(aux, i, mods), mods);
+		setIndex(arr, i, aux[i], mods);
 	return mods;
 }
 
@@ -36,7 +36,7 @@ function interlaceArray(arr) {
 	for (var i = 1; i < aux.length; i+= 2, arrI++)
 		aux[i] = arr[arrI];
 	for (var i = 0; i < arr.length; i++)
-		setIndex(arr, i, auxGetIndex(aux, i, mods), mods);
+		setIndex(arr, i, aux[i], mods);
 	return mods;
 }
 

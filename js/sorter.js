@@ -211,6 +211,7 @@ sortType.addButton(10, 550, 100, 50, "Gnome Sort");
 sortType.addButton(10, 610, 100, 50, "Cocktail Shaker");
 sortType.addButton(10, 670, 100, 50, "Selection Sort");
 
+sortType.addButton(120, 430, 100, 50, "Shell Sort");
 sortType.addButton(120, 490, 100, 50, "Binary Gnome Sort");
 sortType.addButton(120, 550, 100, 50, "Optimized Gnome");
 sortType.addButton(120, 610, 100, 50, "Optimized Shaker");
@@ -419,6 +420,9 @@ c.addEventListener('click', function(event) {
     	disableButtons();
     	if (sortType.getSelected() === "Comb Sort") {
     		doMods(combSort(myGraph.getItems()), true);
+		}
+		else if (sortType.getSelected() === "Shell Sort") {
+    		doMods(shellSort(myGraph.getItems()), true);
 		}
 		else if (sortType.getSelected() === "Bubble Sort") {
     		doMods(bubbleSort(myGraph.getItems()), true);

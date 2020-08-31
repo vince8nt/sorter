@@ -45,6 +45,29 @@ function insertionSort(arr) {
 	return mods;
 }
 
+function shellSort(arr) {
+	var mods = [];
+
+	for (var gap = Math.floor(arr.length / 2); gap > 0; gap = Math.floor(gap / 2)) {
+		for (var i = gap; i < arr.length; i++) {
+			var temp = getIndex(arr, i, mods);
+			var j = i;
+			while(j >= gap && valLessThan(arr, temp, j - gap, mods)) {
+				setIndex(arr, j, getIndex(arr, j - gap, mods), mods);
+				j-= gap;
+			}
+			setIndex(arr, j, temp, mods);
+		}
+	}
+
+	return mods;
+}
+
+
+
+
+
+
 
 
 

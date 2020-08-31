@@ -205,7 +205,7 @@ ctx.fillStyle = "#FFFFFF"; // draw white box behind the buttons
 ctx.fillRect(0, 420, 1024, 310);
 
 sortType = new Selector("#9090FF", "#707070", "#FF0000");
-sortType.addButton(10, 430, 100, 50, "Bubble Sort");
+sortType.addButton(10, 430, 100, 50, "Comb Sort");
 sortType.addButton(10, 490, 100, 50, "Bubble Sort");
 sortType.addButton(10, 550, 100, 50, "Gnome Sort");
 sortType.addButton(10, 610, 100, 50, "Cocktail Shaker");
@@ -417,7 +417,10 @@ c.addEventListener('click', function(event) {
     else if (goButton.clicked(screenX, screenY)) {      // go button
     	console.log("Go button clicked. Using " + sortType.getSelected() + " sort.");
     	disableButtons();
-		if (sortType.getSelected() === "Bubble Sort") {
+    	if (sortType.getSelected() === "Comb Sort") {
+    		doMods(combSort(myGraph.getItems()), true);
+		}
+		else if (sortType.getSelected() === "Bubble Sort") {
     		doMods(bubbleSort(myGraph.getItems()), true);
 		}
 		else if (sortType.getSelected() === "Binary Gnome Sort") {

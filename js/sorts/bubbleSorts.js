@@ -122,6 +122,26 @@ function binaryOptimizedGnomeSort(arr) {
 	return mods;
 }
 
+function combSort(arr) {
+	var mods = [];
+
+	var gap = arr.length;
+	var swapped = true;
+	while (gap > 1 || swapped) {
+		swapped = false;
+		gap = Math.floor((gap * 10) / 13);
+		if (gap < 1) gap = 1;
+		for (var i = 0; i < arr.length - gap; i++) {
+			if (lessThan(arr, i + gap, i, mods)) {
+				swap(arr, i, i + gap, mods);
+				swapped = true;
+			}
+		}
+	}
+
+	return mods;
+}
+
 
 
 

@@ -82,8 +82,43 @@ function medianHeapSortR(arr, begin, end, mods) {
 	}
 }
 
+function bottomUpMedianHeapSort(arr) {
+	var mods = [];
+	bottomUpMedianHeapSortR(arr, 0, arr.length - 1, mods);
+	return mods;
+}
 
-
+function bottomUpMedianHeapSortR(arr, begin, end, mods) {
+	if (end > begin) {
+		var mid = Math.floor((begin + end) / 2);
+		var size;
+		// buildBackMaxHeap(arr, begin, mid, mods);
+		// buildMinHeap(arr, mid + 1, end, mods);
+		for (size = 1; mid + size <= end; size++) {
+			if (lessThan(arr, mid + size, mid + 1 - size, mods))
+				swap(arr, mid + size, mid + 1 - size, mods);
+			backMaxHeapifyBottomUp(arr, mid, size, mid + 1 - size, mods);
+			minHeapifyBottomUp(arr, mid + 1, size, mid + size, mods);
+			if (lessThan(arr, mid + 1, mid, mods)) {
+				swap(arr, mid, mid + 1, mods);
+				backMaxHeapify(arr, mid, size, mid, mods);
+				minHeapify(arr, mid + 1, size, mid + 1, mods);
+			}
+		}
+		if (mid + 1 - size == begin) { // odd length sub-array
+			// console.log("odd length sub array");
+			backMaxHeapifyBottomUp(arr, mid, size, begin, mods);
+			if (lessThan(arr, mid + 1, mid, mods)) {
+				swap(arr, mid, mid + 1, mods);
+				backMaxHeapify(arr, mid, size, mid, mods);
+				minHeapify(arr, mid + 1, size - 1, mid + 1, mods);
+			}
+		}
+		bottomUpMedianHeapSortR(arr, begin, mid - 1, mods);
+		bottomUpMedianHeapSortR(arr, mid + 2, end, mods);
+		
+	}
+}
 
 // creates a max heap on the sub-array of arr
 function buildMaxHeap(arr, begin, end, mods) {
@@ -139,6 +174,15 @@ function minHeapify(arr, start, size, root, mods) {
 	}
 }
 
+function minHeapifyBottomUp(arr, start, size, root, mods) {
+	if (root == start) return;
+	var parent = start + Math.floor((root - start - 1) / 2);
+	if (lessThan(arr, root, parent, mods)) {
+		swap(arr, root, parent, mods);
+		minHeapifyBottomUp(arr, start, size, parent, mods);
+	}
+}
+
 // creates a backwards max heap on the sub-array of arr
 function buildBackMaxHeap(arr, begin, end, mods) {
 	var n = end - begin + 1;
@@ -162,6 +206,15 @@ function backMaxHeapify(arr, end, size, root, mods) {
 		swap(arr, root, largest, mods);
 		// heapify the subtree
 		backMaxHeapify(arr, end, size, largest, mods);
+	}
+}
+
+function backMaxHeapifyBottomUp(arr, end, size, root, mods) {
+	if (root == end) return;
+	var parent = end - Math.floor((end - root - 1) / 2);
+	if (lessThan(arr, parent, root, mods)) {
+		swap(arr, parent, root, mods);
+		backMaxHeapifyBottomUp(arr, end, size, parent, mods);
 	}
 }
 

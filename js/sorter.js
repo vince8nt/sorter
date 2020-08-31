@@ -217,6 +217,7 @@ sortType.addButton(120, 550, 100, 50, "Optimized Gnome");
 sortType.addButton(120, 610, 100, 50, "Optimized Shaker");
 sortType.addButton(120, 670, 100, 50, "Min Max Selection");
 
+sortType.addButton(230, 430, 100, 50, "B-U Median Heap");
 sortType.addButton(230, 490, 100, 50, "Insertion Sort");
 sortType.addButton(230, 550, 100, 50, "Quicksort");
 sortType.addButton(230, 610, 100, 50, "Max Heap Sort");
@@ -423,6 +424,9 @@ c.addEventListener('click', function(event) {
 		}
 		else if (sortType.getSelected() === "Shell Sort") {
     		doMods(shellSort(myGraph.getItems()), true);
+		}
+		else if (sortType.getSelected() === "B-U Median Heap") {
+    		doMods(bottomUpMedianHeapSort(myGraph.getItems()), true);
 		}
 		else if (sortType.getSelected() === "Bubble Sort") {
     		doMods(bubbleSort(myGraph.getItems()), true);
